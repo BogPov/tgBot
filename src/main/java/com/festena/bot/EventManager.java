@@ -55,14 +55,24 @@ public class EventManager {
 
     public HashMap<String, Integer> getResChange(String id){
         HashMap<String, Integer> resChange = new HashMap<>();
-        for (Option opt : this.currentEvent.options){
-            if (opt.id.equals(id)){
-                resChange.put("gold", opt.gold);
-                resChange.put("people", opt.people);
-                resChange.put("food", opt.food);
-                resChange.put("army", opt.army);
-                resChange.put("technology", opt.technology);
-                resChange.put("reputation", opt.reputation);
+        resChange.put("gold", 0);
+        resChange.put("people", 0);
+        resChange.put("food", 0);
+        resChange.put("army", 0);
+        resChange.put("technology", 0);
+        resChange.put("reputation", 0);
+
+        if (this.currentEvent != null && this.currentEvent.options != null) {
+            for (Option opt : this.currentEvent.options){
+                if (opt.id.equalsIgnoreCase(id.trim())){
+                    resChange.put("gold", opt.gold);
+                    resChange.put("people", opt.people);
+                    resChange.put("food", opt.food);
+                    resChange.put("army", opt.army);
+                    resChange.put("technology", opt.technology);
+                    resChange.put("reputation", opt.reputation);
+                    return resChange;
+                }
             }
         }
         return resChange;
