@@ -1,9 +1,6 @@
 package com.festena.bot;
 
 import java.util.HashMap;
-import java.util.Map;
-
-import com.festena.bot.EventManager;
 
 public class Game {
     Resources resources;
@@ -13,7 +10,11 @@ public class Game {
         this.resources = new Resources();
     }
 
-    public String getResForTab(){
+    public EventManager getEventManager() {
+        return eventManager;
+    }
+
+    public String getResForTab() {
         return "👥Население " + this.resources.people
                 + " | 💰Золото " + this.resources.gold
                 + " | 🌾Продовольствие " + this.resources.food
@@ -21,22 +22,20 @@ public class Game {
                 + " | ⚙ Технологии " + this.resources.technology
                 + " | 🏅Репутация " + this.resources.reputation;
     }
-    
-    public void proccesPlAnswer(String player_response){
-        HashMap<String, Integer> resChange = this.eventManager.getResChange(player_response);
+
+    public void processPlayerAnswer(String player_response) {
+        HashMap<String, Integer> resChange = this.eventManager.getResourceChanges(player_response);
         this.resources.gold += resChange.get("gold");
         this.resources.people += resChange.get("people");
         this.resources.food += resChange.get("food");
         this.resources.reputation += resChange.get("reputation");
         this.resources.technology += resChange.get("technology");
         this.resources.army += resChange.get("army");
-
     }
 
-    public String getNextEventText(){
+    public String getNextEventText() {
         this.eventManager.startNewEvent();
         return this.eventManager.getCurrentEventText();
-
     }
 }
 

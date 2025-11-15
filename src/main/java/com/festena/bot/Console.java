@@ -2,21 +2,20 @@ package com.festena.bot;
 
 import java.util.Scanner;
 
-
 public class Console{
     Scanner scanner = new Scanner(System.in);
     
-    public void out(String message){
+    public void out(String message) {
         System.out.print(message);
     }
     
-    public String input(String message){
+    public String input(String message) {
         System.out.print(message);
         String out = scanner.nextLine();
         return out;
     }
 
-    public void clear(){
+    public void clear() {
         System.out.print("\033[H\033[J");    
     }
 }

@@ -25,7 +25,8 @@ public class EventManager {
                 throw new IllegalStateException("Resource '/events.json' not found in classpath");
             }
             // Читаем как List<Event>
-            List<Event> events = mapper.readValue(inputStream, new TypeReference<List<Event>>() {});
+            List<Event> events = mapper.readValue(inputStream, new TypeReference<List<Event>>() {
+            });
             if (events != null) {
                 eventStorage.addAll(events);
             }
@@ -33,6 +34,10 @@ public class EventManager {
             // Логгируй или пробрасывай дальше — зависит от архитектуры
             throw new RuntimeException("Failed to load events.json", e);
         }
+    }
+
+    public void setCurrentEvent(Event event) {
+        this.currentEvent = event;
     }
 
     public void startNewEvent() {
@@ -53,29 +58,29 @@ public class EventManager {
         return sb.toString();
     }
 
-    public HashMap<String, Integer> getResChange(String id){
-        HashMap<String, Integer> resChange = new HashMap<>();
-        resChange.put("gold", 0);
-        resChange.put("people", 0);
-        resChange.put("food", 0);
-        resChange.put("army", 0);
-        resChange.put("technology", 0);
-        resChange.put("reputation", 0);
+    public HashMap<String, Integer> getResourceChanges(String id) {
+        HashMap<String, Integer> resourceChange = new HashMap<>();
+        resourceChange.put("gold", 0);
+        resourceChange.put("people", 0);
+        resourceChange.put("food", 0);
+        resourceChange.put("army", 0);
+        resourceChange.put("technology", 0);
+        resourceChange.put("reputation", 0);
 
         if (this.currentEvent != null && this.currentEvent.options != null) {
-            for (Option opt : this.currentEvent.options){
-                if (opt.id.equalsIgnoreCase(id.trim())){
-                    resChange.put("gold", opt.gold);
-                    resChange.put("people", opt.people);
-                    resChange.put("food", opt.food);
-                    resChange.put("army", opt.army);
-                    resChange.put("technology", opt.technology);
-                    resChange.put("reputation", opt.reputation);
-                    return resChange;
+            for (Option opt : this.currentEvent.options) {
+                if (opt.id.equalsIgnoreCase(id.trim())) {
+                    resourceChange.put("gold", opt.gold);
+                    resourceChange.put("people", opt.people);
+                    resourceChange.put("food", opt.food);
+                    resourceChange.put("army", opt.army);
+                    resourceChange.put("technology", opt.technology);
+                    resourceChange.put("reputation", opt.reputation);
+                    return resourceChange;
                 }
             }
         }
-        return resChange;
+        return resourceChange;
     }
 }
 
@@ -83,8 +88,9 @@ class Event {
     public String legend;
     public List<Option> options;
 
-    // пустой конструктор нужен Jackson'у
-    public Event() {}
+    // пустой конструктор нужен Jackson'y
+    public Event() {
+    }
 
 }
 
@@ -93,7 +99,8 @@ class Option {
     public String text;
     public int gold, people, food, army, technology, reputation;
 
-    public Option() {}
+    public Option() {
+    }
 
     @JsonProperty("effects")
     private void unpackEffects(Map<String, Integer> effects) {

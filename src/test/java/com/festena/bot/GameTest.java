@@ -7,11 +7,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class GameTest {
-
     private Game game;
     private EventManager eventManager;
     private List<Event> allEvents;
@@ -19,30 +17,22 @@ public class GameTest {
     @Before
     public void setUp() throws Exception {
         game = new Game();
-
-        // EventManager из Game
-        Field eventManagerField = Game.class.getDeclaredField("eventManager");
-        eventManagerField.setAccessible(true);
-        eventManager = (EventManager) eventManagerField.get(game);
-
         // все события из events.json
         try (InputStream inputStream = getClass().getResourceAsStream("/events.json")) {
             allEvents = new ObjectMapper().readValue(inputStream, new TypeReference<List<Event>>() {});
         }
+        eventManager = game.getEventManager();
     }
 
     //установка текущего события в EventManager по индексу
-    private void setCurrentEvent(int eventIndex) throws Exception {
+    private void setCurrentEvent(int eventIndex) {
         Event targetEvent = allEvents.get(eventIndex);
-        Field currentEventField = EventManager.class.getDeclaredField("currentEvent");
-        currentEventField.setAccessible(true);
-        currentEventField.set(eventManager, targetEvent);
+        eventManager.setCurrentEvent(targetEvent);
     }
 
     //событие 1: "Крестьяне жалуются на неурожай"
-
     @Test
-    public void testEvent1OptionAResource() throws Exception {
+    public void testEvent1OptionAResource() {
         setCurrentEvent(0);
         Option expectedOption = allEvents.get(0).options.get(0);
 
@@ -50,7 +40,7 @@ public class GameTest {
         int initialReputation = game.resources.reputation;
         int initialPeople = game.resources.people;
 
-        game.proccesPlAnswer("A");
+        game.processPlayerAnswer("A");
 
         assertEquals(initialFood + expectedOption.food, game.resources.food);
         assertEquals(initialReputation + expectedOption.reputation, game.resources.reputation);
@@ -58,9 +48,8 @@ public class GameTest {
     }
 
     //событие 2: "Соседнее королевство предлагает союз"
-
     @Test
-    public void testEvent2OptionAResource() throws Exception {
+    public void testEvent2OptionAResource() {
         setCurrentEvent(1);
         Option expectedOption = allEvents.get(1).options.get(0);
 
@@ -69,7 +58,7 @@ public class GameTest {
         int initialPeople = game.resources.people;
         int initialGold = game.resources.gold;
 
-        game.proccesPlAnswer("A");
+        game.processPlayerAnswer("A");
 
         assertEquals(initialReputation + expectedOption.reputation, game.resources.reputation);
         assertEquals(initialArmy + expectedOption.army, game.resources.army);
@@ -78,9 +67,8 @@ public class GameTest {
     }
 
     //тест на несуществующую опцию
-
     @Test
-    public void testInvalidOptionNotChangeResources() throws Exception {
+    public void testInvalidOptionNotChangeResources() {
         setCurrentEvent(0);
 
         int initialFood = game.resources.food;
@@ -90,7 +78,7 @@ public class GameTest {
         int initialArmy = game.resources.army;
         int initialTechnology = game.resources.technology;
 
-        game.proccesPlAnswer("X");
+        game.processPlayerAnswer("X");
 
         assertEquals(initialFood, game.resources.food);
         assertEquals(initialReputation, game.resources.reputation);
