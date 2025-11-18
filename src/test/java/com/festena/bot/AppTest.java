@@ -13,25 +13,30 @@ public class AppTest {
     @Mock
     private Console mockConsole;
 
+    @Mock
+    private TextManager mockTextManager;
+
     @InjectMocks
     private App appToTest;
 
     @Test
-    public void testProcessCommand_Help() {
+    public void testProcessCommandHelp() {
+        when(mockTextManager.getText("help")).thenReturn("help text");
         appToTest.processCommand("/help");
-        verify(mockConsole, times(1)).out(TextManager.getText("help"));
+        verify(mockConsole, times(1)).out("help text");
         verifyNoMoreInteractions(mockConsole);
     }
 
     @Test
-    public void testProcessCommand_Lore() {
+    public void testProcessCommandLore() {
+        when(mockTextManager.getText("lore")).thenReturn("lore text");
         appToTest.processCommand("/lore");
-        verify(mockConsole, times(1)).out(TextManager.getText("lore"));
+        verify(mockConsole, times(1)).out("lore text");
         verifyNoMoreInteractions(mockConsole);
     }
 
     @Test
-    public void testProcessCommand_UnknownCommand_DefaultCase() {
+    public void testProcessCommandUnknownCommandDefaultCase() {
         appToTest.processCommand("/some_non_existent_command");
         verify(mockConsole, times(1)).out("Такой команды не существует, бро");
         verifyNoMoreInteractions(mockConsole);

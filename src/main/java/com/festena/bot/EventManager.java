@@ -19,19 +19,18 @@ public class EventManager {
     private Random random = new Random();
 
     public EventManager() {
-        // берем файл "/events.json" из папки resources
         try (InputStream inputStream = getClass().getResourceAsStream("/events.json")) {
             if (inputStream == null) {
                 throw new IllegalStateException("Resource '/events.json' not found in classpath");
             }
-            // Читаем как List<Event>
+
             List<Event> events = mapper.readValue(inputStream, new TypeReference<List<Event>>() {
             });
             if (events != null) {
                 eventStorage.addAll(events);
             }
         } catch (IOException e) {
-            // Логгируй или пробрасывай дальше — зависит от архитектуры
+           
             throw new RuntimeException("Failed to load events.json", e);
         }
     }

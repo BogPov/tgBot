@@ -1,58 +1,67 @@
 package com.festena.bot;
 
 public class App {
-    private Console cons;
+    private Console console;
     private boolean runFlag = true;
+    private TextManager textManager = new TextManager();
+    
+    private static final String WELCOME_MESSAGE = "welcome_message";
+    private static final String HELP_COMMAND = "/help";
+    private static final String STOP_COMMAND = "/stop";
+    private static final String LORE_COMMAND = "/lore";
+    private static final String START_COMMAND = "/start";
+    private static final String INPUT_PROMPT = "\n Выбирите вариант ответа: ";
+    private static final String CONTINUE_PROMPT = "\n Нажмите enter для продолжения... ";
+    private static final String UNKNOWN_COMMAND_MESSAGE = "Такой команды не существует, бро";
 
-    public App(Console cons) {
-        this.cons = cons;
+    public App() {
+        this.console = new Console();
+        console.clear();
+        console.out(textManager.getText(WELCOME_MESSAGE));
+        while (true) {
+            String answer = console.input("");
+            processCommand(answer);
+        }
     }
 
     public static void main(String[] args) {
-        Console realConsole = new Console();
-        App app = new App(realConsole);
-        realConsole.clear();
-        realConsole.out(TextManager.getText("welcome_message"));
-        while (true) {
-            String ans = realConsole.input("");
-            app.processCommand(ans);
-        }
+        new App();
     }
 
     protected void start() {
         Game game = new Game();
-        while (this.runFlag) {
-            cons.clear();
-            cons.out(game.getResForTab());
-            cons.out("\n" + "\n" + "\n");
-            cons.out(game.getNextEventText());
-            String playerResponse = cons.input("\n Выбирите вариант ответа: ");
+        while (runFlag) {
+            console.clear();
+            console.out(game.getResForTab());
+            console.out("\n\n\n");
+            console.out(game.getNextEventText());
+            String playerResponse = console.input(INPUT_PROMPT);
             if (playerResponse.startsWith("/")) {
-                this.processCommand(playerResponse);
-                cons.input("\n Нажмите enter для продолжения... ");
+                processCommand(playerResponse);
+                console.input(CONTINUE_PROMPT);
                 continue;
             }
             game.processPlayerAnswer(playerResponse.toUpperCase());
-            cons.input("\n Нажмите enter для продолжения...");
+            console.input(CONTINUE_PROMPT);
         }
     }
 
     protected void processCommand(String response) {
         switch (response) {
-            case "/help":
-                cons.out(TextManager.getText("help"));
+            case HELP_COMMAND:
+                console.out(textManager.getText("help"));
                 break;
-            case "/stop":
+            case STOP_COMMAND:
                 System.exit(0);
                 break;
-            case "/lore":
-                cons.out(TextManager.getText("lore"));
+            case LORE_COMMAND:
+                console.out(textManager.getText("lore"));
                 break;
-            case "/start":
-                this.start();
+            case START_COMMAND:
+                start();
                 break;
             default:
-                cons.out("Такой команды не существует, бро");
+                console.out(UNKNOWN_COMMAND_MESSAGE);
         }
     }
 }
