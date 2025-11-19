@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import java.io.InputStream;
@@ -19,7 +20,8 @@ public class GameTest {
         game = new Game();
         // все события из events.json
         try (InputStream inputStream = getClass().getResourceAsStream("/events.json")) {
-            allEvents = new ObjectMapper().readValue(inputStream, new TypeReference<List<Event>>() {});
+            allEvents = new ObjectMapper().readValue(inputStream, new TypeReference<List<Event>>() {
+            });
         }
         eventManager = game.getEventManager();
     }
@@ -34,7 +36,7 @@ public class GameTest {
     @Test
     public void testEvent1OptionAResource() {
         setCurrentEvent(0);
-        Option expectedOption = allEvents.get(0).options.get(0);
+        Option expectedOption = allEvents.get(0).getOptions().get(0);
 
         int initialFood = game.getResources().getFood();
         int initialReputation = game.getResources().getReputation();
@@ -42,16 +44,16 @@ public class GameTest {
 
         game.processPlayerAnswer("A");
 
-        assertEquals(initialFood + expectedOption.food, game.getResources().getFood());
-        assertEquals(initialReputation + expectedOption.reputation, game.getResources().getReputation());
-        assertEquals(initialPeople + expectedOption.people, game.getResources().getPeople());
+        assertEquals(initialFood + expectedOption.getFood(), game.getResources().getFood());
+        assertEquals(initialReputation + expectedOption.getReputation(), game.getResources().getReputation());
+        assertEquals(initialPeople + expectedOption.getPeople(), game.getResources().getPeople());
     }
 
     //событие 2: "Соседнее королевство предлагает союз"
     @Test
     public void testEvent2OptionAResource() {
         setCurrentEvent(1);
-        Option expectedOption = allEvents.get(1).options.get(0);
+        Option expectedOption = allEvents.get(1).getOptions().get(0);
 
         int initialReputation = game.getResources().getReputation();
         int initialArmy = game.getResources().getArmy();
@@ -60,10 +62,10 @@ public class GameTest {
 
         game.processPlayerAnswer("A");
 
-        assertEquals(initialReputation + expectedOption.reputation, game.getResources().getReputation());
-        assertEquals(initialArmy + expectedOption.army, game.getResources().getArmy());
-        assertEquals(initialPeople + expectedOption.people, game.getResources().getPeople());
-        assertEquals(initialGold + expectedOption.gold, game.getResources().getGold());
+        assertEquals(initialReputation + expectedOption.getReputation(), game.getResources().getReputation());
+        assertEquals(initialArmy + expectedOption.getArmy(), game.getResources().getArmy());
+        assertEquals(initialPeople + expectedOption.getPeople(), game.getResources().getPeople());
+        assertEquals(initialGold + expectedOption.getGold(), game.getResources().getGold());
     }
 
     //тест на несуществующую опцию

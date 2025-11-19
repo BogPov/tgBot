@@ -30,7 +30,7 @@ public class EventManager {
                 eventStorage.addAll(events);
             }
         } catch (IOException e) {
-           
+
             throw new RuntimeException("Failed to load events.json", e);
         }
     }
@@ -48,10 +48,10 @@ public class EventManager {
 
     public String getCurrentEventText() {
         if (currentEvent == null) return "No current event. Call startNewEvent() first.";
-        StringBuilder sb = new StringBuilder(currentEvent.legend).append("\n");
-        if (currentEvent.options != null) {
-            for (Option ans : currentEvent.options) {
-                sb.append(ans.id).append(". ").append(ans.text).append("\n");
+        StringBuilder sb = new StringBuilder(currentEvent.getLegend()).append("\n");
+        if (currentEvent.getOptions() != null) {
+            for (Option ans : currentEvent.getOptions()) {
+                sb.append(ans.getId()).append(". ").append(ans.getText()).append("\n");
             }
         }
         return sb.toString();
@@ -66,15 +66,15 @@ public class EventManager {
         resourceChange.put("technology", 0);
         resourceChange.put("reputation", 0);
 
-        if (this.currentEvent != null && this.currentEvent.options != null) {
-            for (Option opt : this.currentEvent.options) {
-                if (opt.id.equalsIgnoreCase(id.trim())) {
-                    resourceChange.put("gold", opt.gold);
-                    resourceChange.put("people", opt.people);
-                    resourceChange.put("food", opt.food);
-                    resourceChange.put("army", opt.army);
-                    resourceChange.put("technology", opt.technology);
-                    resourceChange.put("reputation", opt.reputation);
+        if (this.currentEvent != null && this.currentEvent.getOptions() != null) {
+            for (Option opt : this.currentEvent.getOptions()) {
+                if (opt.getId().equalsIgnoreCase(id.trim())) {
+                    resourceChange.put("gold", opt.getGold());
+                    resourceChange.put("people", opt.getPeople());
+                    resourceChange.put("food", opt.getFood());
+                    resourceChange.put("army", opt.getArmy());
+                    resourceChange.put("technology", opt.getTechnology());
+                    resourceChange.put("reputation", opt.getReputation());
                     return resourceChange;
                 }
             }
@@ -84,21 +84,60 @@ public class EventManager {
 }
 
 class Event {
-    public String legend;
-    public List<Option> options;
+    private String legend;
+    private List<Option> options;
 
     // пустой конструктор нужен Jackson'y
     public Event() {
     }
 
+    public String getLegend() {
+        return legend;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
 }
 
 class Option {
-    public String id;
-    public String text;
-    public int gold, people, food, army, technology, reputation;
+    private String id;
+    private String text;
+    private int gold, people, food, army, technology, reputation;
 
     public Option() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public int getPeople() {
+        return people;
+    }
+
+    public int getFood() {
+        return food;
+    }
+
+    public int getArmy() {
+        return army;
+    }
+
+    public int getTechnology() {
+        return technology;
+    }
+
+    public int getReputation() {
+        return reputation;
     }
 
     @JsonProperty("effects")
