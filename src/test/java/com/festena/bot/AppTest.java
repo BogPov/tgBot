@@ -24,7 +24,8 @@ public class AppTest {
         when(mockTextManager.getText("help")).thenReturn("help text");
         appToTest.processCommand("/help");
         verify(mockConsole, times(1)).out("help text");
-        verifyNoMoreInteractions(mockConsole);
+        verify(mockTextManager, times(1)).getText("help");
+        verifyNoMoreInteractions(mockConsole, mockTextManager);
     }
 
     @Test
@@ -32,13 +33,14 @@ public class AppTest {
         when(mockTextManager.getText("lore")).thenReturn("lore text");
         appToTest.processCommand("/lore");
         verify(mockConsole, times(1)).out("lore text");
-        verifyNoMoreInteractions(mockConsole);
+        verify(mockTextManager, times(1)).getText("lore");
+        verifyNoMoreInteractions(mockConsole, mockTextManager);
     }
 
     @Test
     public void testProcessCommandUnknownCommandDefaultCase() {
         appToTest.processCommand("/some_non_existent_command");
         verify(mockConsole, times(1)).out("Такой команды не существует, бро");
-        verifyNoMoreInteractions(mockConsole);
+        verifyNoMoreInteractions(mockConsole, mockTextManager);
     }
 }

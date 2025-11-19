@@ -2,9 +2,8 @@ package com.festena.bot;
 
 public class App {
     private Console console;
-    private boolean runFlag = true;
-    private TextManager textManager = new TextManager();
-    
+    private TextManager textManager;
+
     private static final String WELCOME_MESSAGE = "welcome_message";
     private static final String HELP_COMMAND = "/help";
     private static final String STOP_COMMAND = "/stop";
@@ -16,6 +15,15 @@ public class App {
 
     public App() {
         this.console = new Console();
+        this.textManager = new TextManager();
+    }
+
+    public static void main(String[] args) {
+        App app = new App();
+        app.initializeAndRun();
+    }
+
+    public void initializeAndRun() {
         console.clear();
         console.out(textManager.getText(WELCOME_MESSAGE));
         while (true) {
@@ -24,13 +32,9 @@ public class App {
         }
     }
 
-    public static void main(String[] args) {
-        new App();
-    }
-
     protected void start() {
         Game game = new Game();
-        while (runFlag) {
+        while (true) {
             console.clear();
             console.out(game.getResForTab());
             console.out("\n\n\n");
