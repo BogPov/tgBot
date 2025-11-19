@@ -3,7 +3,7 @@ package com.festena.bot;
 import java.util.Scanner;
 
 public class Console{
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
     
     public void out(String message) {
         System.out.print(message);

@@ -36,15 +36,15 @@ public class GameTest {
         setCurrentEvent(0);
         Option expectedOption = allEvents.get(0).options.get(0);
 
-        int initialFood = game.resources.food;
-        int initialReputation = game.resources.reputation;
-        int initialPeople = game.resources.people;
+        int initialFood = game.getResources().getFood();
+        int initialReputation = game.getResources().getReputation();
+        int initialPeople = game.getResources().getPeople();
 
         game.processPlayerAnswer("A");
 
-        assertEquals(initialFood + expectedOption.food, game.resources.food);
-        assertEquals(initialReputation + expectedOption.reputation, game.resources.reputation);
-        assertEquals(initialPeople + expectedOption.people, game.resources.people);
+        assertEquals(initialFood + expectedOption.food, game.getResources().getFood());
+        assertEquals(initialReputation + expectedOption.reputation, game.getResources().getReputation());
+        assertEquals(initialPeople + expectedOption.people, game.getResources().getPeople());
     }
 
     //событие 2: "Соседнее королевство предлагает союз"
@@ -53,17 +53,17 @@ public class GameTest {
         setCurrentEvent(1);
         Option expectedOption = allEvents.get(1).options.get(0);
 
-        int initialReputation = game.resources.reputation;
-        int initialArmy = game.resources.army;
-        int initialPeople = game.resources.people;
-        int initialGold = game.resources.gold;
+        int initialReputation = game.getResources().getReputation();
+        int initialArmy = game.getResources().getArmy();
+        int initialPeople = game.getResources().getPeople();
+        int initialGold = game.getResources().getGold();
 
         game.processPlayerAnswer("A");
 
-        assertEquals(initialReputation + expectedOption.reputation, game.resources.reputation);
-        assertEquals(initialArmy + expectedOption.army, game.resources.army);
-        assertEquals(initialPeople + expectedOption.people, game.resources.people);
-        assertEquals(initialGold + expectedOption.gold, game.resources.gold);
+        assertEquals(initialReputation + expectedOption.reputation, game.getResources().getReputation());
+        assertEquals(initialArmy + expectedOption.army, game.getResources().getArmy());
+        assertEquals(initialPeople + expectedOption.people, game.getResources().getPeople());
+        assertEquals(initialGold + expectedOption.gold, game.getResources().getGold());
     }
 
     //тест на несуществующую опцию
@@ -71,20 +71,20 @@ public class GameTest {
     public void testInvalidOptionNotChangeResources() {
         setCurrentEvent(0);
 
-        int initialFood = game.resources.food;
-        int initialReputation = game.resources.reputation;
-        int initialPeople = game.resources.people;
-        int initialGold = game.resources.gold;
-        int initialArmy = game.resources.army;
-        int initialTechnology = game.resources.technology;
+        int initialFood = game.getResources().getFood();
+        int initialReputation = game.getResources().getReputation();
+        int initialPeople = game.getResources().getPeople();
+        int initialGold = game.getResources().getGold();
+        int initialArmy = game.getResources().getArmy();
+        int initialTechnology = game.getResources().getTechnology();
 
         game.processPlayerAnswer("X");
 
-        assertEquals(initialFood, game.resources.food);
-        assertEquals(initialReputation, game.resources.reputation);
-        assertEquals(initialPeople, game.resources.people);
-        assertEquals(initialGold, game.resources.gold);
-        assertEquals(initialArmy, game.resources.army);
-        assertEquals(initialTechnology, game.resources.technology);
+        assertEquals(initialFood, game.getResources().getFood());
+        assertEquals(initialReputation, game.getResources().getReputation());
+        assertEquals(initialPeople, game.getResources().getPeople());
+        assertEquals(initialGold, game.getResources().getGold());
+        assertEquals(initialArmy, game.getResources().getArmy());
+        assertEquals(initialTechnology, game.getResources().getTechnology());
     }
 }
