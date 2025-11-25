@@ -4,9 +4,7 @@ import com.festena.tgBot.Session.UserSession;
 import com.festena.tgBot.manager.TextManager;
 import com.festena.tgBot.manager.UserSessionManager;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +33,7 @@ public class BotService {
     final private static String START_EVENT_FIRST_WARNING = "Перед тем как писать сообщения, начни игру: /play";
 
     final private static String START_COMMAND_ABUSE_MESSAGE = "Бро, ты уже запустил бота!";
-    final private static String EMPTY_STRING= "";
+    final private static String EMPTY_STRING = "";
     // при отправке сообщения строка обрабатывается на ключение этой строки, и разбивает сообщение на несколько
     final private static String STRING_DIVIDOR = "\n\n";
 
@@ -43,32 +41,33 @@ public class BotService {
     final private TextManager textManager;
     private static final Logger log = LoggerFactory.getLogger(BotService.class);
 
-    public BotService(){
+    public BotService() {
         this.userSessionManager = new UserSessionManager();
         this.textManager = new TextManager();
     }
 
-    public String processMessage(Message message){
+    public String processMessage(Message message) {
         String messageText = message.getText();
         Long chatId = message.getChatId();
-        if(isMessageCommand(messageText)){
+        if (isMessageCommand(messageText)) {
             return this.processCommand(message);
         }
-        if(!userSessionManager.isSessionExist(chatId)){
+        if (!userSessionManager.isSessionExist(chatId)) {
             return START_BOT_FIRST_WARNING;
         }
 
         UserSession session = userSessionManager.getUserSession(chatId);
-        if(session.hasCurrentEvent()){
-            if (messageText.matches("(?i)[abcd]")){
+        if (session.hasCurrentEvent()) {
+            if (messageText.matches("(?i)[abcd]")) {
                 return session.processPlayerAnswer(messageText);
-            } else{
+            } else {
                 return CORRECT_ANSWER_WARNING + STRING_DIVIDOR + session.getCurrentEventText();
             }
         } else {
             return START_EVENT_FIRST_WARNING;
         }
     }
+
     private String processCommand(Message message) {
         Long chatId = message.getChatId();
         String messageText = message.getText();
@@ -93,7 +92,7 @@ public class BotService {
                     return session.getResForTab();
                 }
                 case SHOW_LEADERBOARD_COMMAND -> {
-                    return this.getOnlinePlayersLeaderboard("gold");
+                    return this.getOnlinePlayersLeaderboard();
                 }
                 default -> {
                     return UNKNOWN_COMMAND_MESSAGE;
@@ -108,11 +107,11 @@ public class BotService {
         return EMPTY_STRING;
     }
 
-    String getOnlinePlayersLeaderboard(String res){
+    String getOnlinePlayersLeaderboard() {
         HashMap<Long, UserSession> sessions = userSessionManager.getAllSessions();
 
         HashMap<Long, Integer> chatIdsWithGold = new HashMap<>();
-        for (Map.Entry<Long, UserSession> entry : sessions.entrySet()){
+        for (Map.Entry<Long, UserSession> entry : sessions.entrySet()) {
             chatIdsWithGold.put(entry.getKey(), entry.getValue().getAmountOfGold());
         }
         // Сортировка по убыванию золота
@@ -133,7 +132,7 @@ public class BotService {
         return result.toString();
     }
 
-    private boolean isMessageCommand(String message){
+    private boolean isMessageCommand(String message) {
         return message.startsWith(COMMAND_SYMBOL);
     }
 }
