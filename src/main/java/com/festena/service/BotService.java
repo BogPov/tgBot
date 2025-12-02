@@ -1,8 +1,8 @@
-package com.festena.tgBot.service;
+package com.festena.service;
 
-import com.festena.tgBot.Session.UserSession;
-import com.festena.tgBot.manager.TextManager;
-import com.festena.tgBot.manager.UserSessionManager;
+import com.festena.Session.UserSession;
+import com.festena.manager.TextManager;
+import com.festena.manager.UserSessionManager;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -41,9 +41,9 @@ public class BotService {
     final private TextManager textManager;
     private static final Logger log = LoggerFactory.getLogger(BotService.class);
 
-    public BotService() {
-        this.userSessionManager = new UserSessionManager();
-        this.textManager = new TextManager();
+    public BotService(UserSessionManager userSessionManager, TextManager textManager) {
+        this.userSessionManager = userSessionManager;
+        this.textManager = textManager;
     }
 
     public String processMessage(Message message) {

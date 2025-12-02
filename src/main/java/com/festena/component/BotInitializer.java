@@ -1,6 +1,6 @@
-package com.festena.tgBot.component;
+package com.festena.component;
 
-import com.festena.tgBot.service.TelegramBot;
+import com.festena.service.TelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;

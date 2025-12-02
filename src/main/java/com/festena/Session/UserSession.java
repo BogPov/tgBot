@@ -1,7 +1,7 @@
-package com.festena.tgBot.Session;
+package com.festena.Session;
 
-import com.festena.tgBot.manager.EventManager;
-import com.festena.tgBot.service.TelegramBot;
+import com.festena.manager.EventManager;
+import com.festena.service.TelegramBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

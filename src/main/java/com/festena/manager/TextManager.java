@@ -1,10 +1,13 @@
-package com.festena.tgBot.manager;
+package com.festena.manager;
 
 import org.yaml.snakeyaml.Yaml;
+
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.util.Map;
 
+@Component
 public class TextManager {
     private Yaml yaml = new Yaml();
     private InputStream inputStream;

@@ -1,6 +1,6 @@
-package com.festena.tgBot.service;
+package com.festena.service;
 
-import com.festena.tgBot.config.BotConfig;
+import com.festena.config.BotConfig;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChat;
@@ -27,10 +27,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private static final Logger log = LoggerFactory.getLogger(TelegramBot.class);
 
-    public TelegramBot(BotConfig config){
+    public TelegramBot(BotConfig config, BotService service){
         this.config = config;
-        this.service = new BotService();
+        this.service = service;
     }
+
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()){
@@ -45,6 +46,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
     }
+
     public void sendTextMessage(Long chatId, String text) {
         text = processSpecialSymbols(text);
         try {
@@ -113,6 +115,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return messages;
 
     }
+
     private String getUserName(Long chatId) {
         try {
             GetChat getChat = new GetChat(chatId.toString());
@@ -130,6 +133,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public String getBotToken(){
         return config.getBotToken();
     }
+
     @Override
     public String getBotUsername() {
         return config.getBotName();

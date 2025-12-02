@@ -1,4 +1,4 @@
-package com.festena.tgBot.config;
+package com.festena.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
