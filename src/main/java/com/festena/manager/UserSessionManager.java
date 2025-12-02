@@ -1,0 +1,38 @@
+package com.festena.tgBot.manager;
+
+import com.festena.tgBot.Session.UserSession;
+import com.festena.tgBot.service.TelegramBot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+
+@Component
+public class UserSessionManager {
+    private HashMap<Long, UserSession> sessions = new HashMap<>();
+
+    private static final Logger log = LoggerFactory.getLogger(UserSessionManager.class);
+
+    public UserSessionManager(){
+        log.info("Менеджер сессий создан!");
+    }
+    public void addSession(Long chatID, Long userId){
+        UserSession session = new UserSession(chatID, userId);
+        sessions.put(chatID, session);
+    }
+
+    public boolean isSessionExist(Long chatId){
+        return sessions.containsKey(chatId);
+    }
+
+    public HashMap<Long, UserSession> getAllSessions(){
+        return sessions;
+    }
+    public UserSession getUserSession(Long chatId){
+        return sessions.get(chatId);
+    }
+    public void removeSession(Long chatId) {
+        sessions.remove(chatId);
+    }
+}
