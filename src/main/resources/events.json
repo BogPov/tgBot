@@ -1,0 +1,201 @@
+[
+  {
+    "legend": "Крестьяне жалуются на неурожай.",
+    "options": [
+      { "id": "A", "text": "Раздать зерно из запасов.", "effects": { "food": -20, "reputation": 15, "army": 0, "technology": 0, "people": 10, "gold": 0 } },
+      { "id": "B", "text": "Игнорировать жалобы.", "effects": { "food": 0, "reputation": -15, "army": 0, "technology": 0, "people": -5, "gold": 0 } },
+      { "id": "C", "text": "Повысить налоги на зерно.", "effects": { "food": -10, "reputation": -10, "army": 0, "technology": 0, "people": -5, "gold": 15 } },
+      { "id": "D", "text": "Попросить магов улучшить урожай.", "effects": { "food": 15, "reputation": 5, "army": 0, "technology": 10, "people": 0, "gold": -10 } }
+    ]
+  },
+  {
+    "legend": "Соседнее королевство предлагает союз.",
+    "options": [
+      { "id": "A", "text": "Принять союз и заключить договор.", "effects": { "food": 0, "reputation": 20, "army": 10, "technology": 0, "people": 5, "gold": -10 } },
+      { "id": "B", "text": "Отказать в союзе.", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": 0, "people": 0, "gold": 0 } },
+      { "id": "C", "text": "Потребовать дары за союз.", "effects": { "food": 10, "reputation": -5, "army": 0, "technology": 0, "people": 0, "gold": 20 } },
+      { "id": "D", "text": "Подстроить предательство после подписания.", "effects": { "food": 0, "reputation": -20, "army": 20, "technology": 0, "people": -5, "gold": 10 } }
+    ]
+  },
+  {
+    "legend": "В королевстве вспыхнула эпидемия.",
+    "options": [
+      { "id": "A", "text": "Закрыть города и ввести карантин.", "effects": { "food": -10, "reputation": 5, "army": 0, "technology": 0, "people": -10, "gold": -10 } },
+      { "id": "B", "text": "Игнорировать болезнь.", "effects": { "food": 0, "reputation": -20, "army": 0, "technology": 0, "people": -20, "gold": 0 } },
+      { "id": "C", "text": "Поручить лекарям создать зелье.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 10, "people": 10, "gold": -15 } },
+      { "id": "D", "text": "Отправить армию сжечь заражённые деревни.", "effects": { "food": -5, "reputation": -25, "army": -10, "technology": 0, "people": -15, "gold": 0 } }
+    ]
+  },
+  {
+    "legend": "Кузнецы требуют оплату за новые мечи для армии.",
+    "options": [
+      { "id": "A", "text": "Заплатить полностью.", "effects": { "food": 0, "reputation": 10, "army": 15, "technology": 0, "people": 0, "gold": -20 } },
+      { "id": "B", "text": "Отложить оплату.", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": 0, "people": 0, "gold": 0 } },
+      { "id": "C", "text": "Попросить часть оплаты оружием.", "effects": { "food": 0, "reputation": 5, "army": 10, "technology": 0, "people": 0, "gold": -10 } },
+      { "id": "D", "text": "Конфисковать мечи силой.", "effects": { "food": 0, "reputation": -20, "army": 5, "technology": 0, "people": -5, "gold": 10 } }
+    ]
+  },
+  {
+    "legend": "На границе замечены разбойники.",
+    "options": [
+      { "id": "A", "text": "Отправить армию для поимки.", "effects": { "food": -5, "reputation": 10, "army": -5, "technology": 0, "people": 5, "gold": -5 } },
+      { "id": "B", "text": "Заплатить выкуп за мир.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": 0, "gold": -15 } },
+      { "id": "C", "text": "Игнорировать угрозу.", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": 0, "people": -10, "gold": 0 } },
+      { "id": "D", "text": "Нанять разбойников как наёмников.", "effects": { "food": 0, "reputation": -10, "army": 10, "technology": 0, "people": -5, "gold": -10 } }
+    ]
+  },
+  {
+    "legend": "Маги просят финансирование для исследований.",
+    "options": [
+      { "id": "A", "text": "Выделить средства.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 15, "people": 0, "gold": -20 } },
+      { "id": "B", "text": "Отказать в финансировании.", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": -5, "people": 0, "gold": 0 } },
+      { "id": "C", "text": "Поручить им создать оружие.", "effects": { "food": 0, "reputation": 5, "army": 10, "technology": 10, "people": 0, "gold": -15 } },
+      { "id": "D", "text": "Обложить магов налогом.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": -10, "people": 0, "gold": 15 } }
+    ]
+  },
+  {
+    "legend": "На рынке вспыхнул пожар.",
+    "options": [
+      { "id": "A", "text": "Послать солдат тушить огонь.", "effects": { "food": -5, "reputation": 10, "army": -5, "technology": 0, "people": 5, "gold": -10 } },
+      { "id": "B", "text": "Позволить сгореть — рынок восстановят.", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": 0, "people": -5, "gold": -5 } },
+      { "id": "C", "text": "Попросить магов потушить магией.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 10, "people": 5, "gold": -10 } },
+      { "id": "D", "text": "Воспользоваться пожаром, чтобы изъять имущество торговцев.", "effects": { "food": 0, "reputation": -15, "army": 0, "technology": 0, "people": -10, "gold": 20 } }
+    ]
+  },
+  {
+    "legend": "Армия требует новых доспехов.",
+    "options": [
+      { "id": "A", "text": "Выделить средства на кузнецов.", "effects": { "food": 0, "reputation": 5, "army": 15, "technology": 5, "people": 0, "gold": -20 } },
+      { "id": "B", "text": "Отказать — старые ещё годятся.", "effects": { "food": 0, "reputation": -10, "army": -5, "technology": 0, "people": 0, "gold": 0 } },
+      { "id": "C", "text": "Попросить магов зачаровать старые доспехи.", "effects": { "food": 0, "reputation": 5, "army": 10, "technology": 10, "people": 0, "gold": -10 } },
+      { "id": "D", "text": "Продать часть доспехов соседям.", "effects": { "food": 0, "reputation": -5, "army": -10, "technology": 0, "people": 0, "gold": 15 } }
+    ]
+  },
+  {
+    "legend": "В замке обнаружен шпион.",
+    "options": [
+      { "id": "A", "text": "Казнить шпиона.", "effects": { "food": 0, "reputation": 5, "army": 5, "technology": 0, "people": -5, "gold": 0 } },
+      { "id": "B", "text": "Пытать, чтобы узнать, кто его послал.", "effects": { "food": 0, "reputation": -5, "army": 10, "technology": 0, "people": -5, "gold": 0 } },
+      { "id": "C", "text": "Отпустить ради дипломатии.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 0, "people": 5, "gold": 0 } },
+      { "id": "D", "text": "Подкупить шпиона, чтобы он стал двойным агентом.", "effects": { "food": 0, "reputation": 5, "army": 10, "technology": 5, "people": 0, "gold": -10 } }
+    ]
+  },
+  {
+    "legend": "Королева предлагает устроить бал.",
+    "options": [
+      { "id": "A", "text": "Согласиться и устроить праздник.", "effects": { "food": -10, "reputation": 15, "army": 0, "technology": 0, "people": 10, "gold": -15 } },
+      { "id": "B", "text": "Отказать — сейчас не время.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": -5, "gold": 0 } },
+      { "id": "C", "text": "Провести скромное торжество.", "effects": { "food": -5, "reputation": 10, "army": 0, "technology": 0, "people": 5, "gold": -5 } },
+      { "id": "D", "text": "Взять плату с приглашённых гостей.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": -5, "gold": 10 } }
+    ]
+  },
+  {
+    "legend": "Послы чужеземного народа привезли странные устройства.",
+    "options": [
+      { "id": "A", "text": "Изучить их технологии.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 15, "people": 0, "gold": -10 } },
+      { "id": "B", "text": "Запретить — это колдовство!", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": -10, "people": -5, "gold": 0 } },
+      { "id": "C", "text": "Продать устройства на рынке.", "effects": { "food": 0, "reputation": 0, "army": 0, "technology": -5, "people": 0, "gold": 20 } },
+      { "id": "D", "text": "Попросить научить ваших учёных.", "effects": { "food": 0, "reputation": 15, "army": 0, "technology": 20, "people": 5, "gold": -15 } }
+    ]
+  },
+  {
+    "legend": "В королевстве голод.",
+    "options": [
+      { "id": "A", "text": "Раздать последние запасы.", "effects": { "food": -30, "reputation": 20, "army": 0, "technology": 0, "people": 15, "gold": 0 } },
+      { "id": "B", "text": "Устроить лотерею на еду.", "effects": { "food": -10, "reputation": -10, "army": 0, "technology": 0, "people": -5, "gold": 5 } },
+      { "id": "C", "text": "Закупить зерно у соседей.", "effects": { "food": 20, "reputation": 10, "army": 0, "technology": 0, "people": 10, "gold": -15 } },
+      { "id": "D", "text": "Пустить слух, что урожай скоро придёт.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": 0, "gold": 0 } }
+    ]
+  },
+  {
+    "legend": "Группа учёных предлагает построить обсерваторию.",
+    "options": [
+      { "id": "A", "text": "Одобрить строительство.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 20, "people": 0, "gold": -20 } },
+      { "id": "B", "text": "Отказать — слишком дорого.", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": -10, "people": 0, "gold": 0 } },
+      { "id": "C", "text": "Построить её совместно с соседним королевством.", "effects": { "food": 0, "reputation": 15, "army": 0, "technology": 15, "people": 0, "gold": -10 } },
+      { "id": "D", "text": "Продать землю, где планировали строить.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": 0, "gold": 15 } }
+    ]
+  },
+  {
+    "legend": "Вор украл из королевской казны.",
+    "options": [
+      { "id": "A", "text": "Казнить вора публично.", "effects": { "food": 0, "reputation": 5, "army": 5, "technology": 0, "people": -5, "gold": 0 } },
+      { "id": "B", "text": "Помиловать ради милосердия.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 0, "people": 10, "gold": -5 } },
+      { "id": "C", "text": "Взять его в шпионскую службу.", "effects": { "food": 0, "reputation": 5, "army": 10, "technology": 0, "people": 0, "gold": 0 } },
+      { "id": "D", "text": "Потребовать вернуть украденное с процентами.", "effects": { "food": 0, "reputation": 0, "army": 0, "technology": 0, "people": -5, "gold": 10 } }
+    ]
+  },
+  {
+    "legend": "Пророк предсказывает беду.",
+    "options": [
+      { "id": "A", "text": "Послушать и подготовиться.", "effects": { "food": -5, "reputation": 10, "army": 5, "technology": 0, "people": 5, "gold": -5 } },
+      { "id": "B", "text": "Игнорировать суеверия.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": 0, "gold": 0 } },
+      { "id": "C", "text": "Кинуть пророка в темницу.", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": 0, "people": -5, "gold": 0 } },
+      { "id": "D", "text": "Позвать пророка при дворе — устроить слушания.", "effects": { "food": 0, "reputation": 5, "army": 0, "technology": 0, "people": 5, "gold": -5 } }
+    ]
+  },
+  {
+    "legend": "Пираты нападают на торговые караваны.",
+    "options": [
+      { "id": "A", "text": "Отправить флот на охоту.", "effects": { "food": 0, "reputation": 10, "army": 10, "technology": 0, "people": 0, "gold": -15 } },
+      { "id": "B", "text": "Заплатить пиратам за безопасность.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": 0, "gold": -10 } },
+      { "id": "C", "text": "Организовать ночью засаду на порт.", "effects": { "food": 0, "reputation": 5, "army": -5, "technology": 5, "people": 0, "gold": 10 } },
+      { "id": "D", "text": "Оставить торговцев самим решать проблему.", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": 0, "people": -5, "gold": 0 } }
+    ]
+  },
+  {
+    "legend": "Молодой герцог хочет жениться на иностранной принцессе.",
+    "options": [
+      { "id": "A", "text": "Благословить союз — укрепление связей.", "effects": { "food": 0, "reputation": 15, "army": 0, "technology": 0, "people": 5, "gold": -5 } },
+      { "id": "B", "text": "Запретить брак — опасный союз.", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": 0, "people": -5, "gold": 0 } },
+      { "id": "C", "text": "Потребовать выкуп за разрешение.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": 0, "gold": 20 } },
+      { "id": "D", "text": "Использовать свадьбу как повод для великого праздника.", "effects": { "food": -10, "reputation": 10, "army": 0, "technology": 0, "people": 10, "gold": -10 } }
+    ]
+  },
+  {
+    "legend": "Учитель школы просит разрешить открыть новые уроки ремесла.",
+    "options": [
+      { "id": "A", "text": "Поддержать — обучать ремесленников.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 10, "people": 5, "gold": -10 } },
+      { "id": "B", "text": "Отказать — боитесь перемен.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": -5, "people": 0, "gold": 0 } },
+      { "id": "C", "text": "Сделать платные курсы.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 5, "people": -5, "gold": 10 } },
+      { "id": "D", "text": "Нанять иностранных мастеров для обучения.", "effects": { "food": 0, "reputation": 5, "army": 0, "technology": 15, "people": 0, "gold": -15 } }
+    ]
+  },
+  {
+    "legend": "Пожарная сигнализация в столице сработала из-за ложной тревоги.",
+    "options": [
+      { "id": "A", "text": "Похвалить службу за быстроту и поощрить.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 0, "people": 5, "gold": -5 } },
+      { "id": "B", "text": "Наложить штраф на оповещателей.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": -5, "gold": 5 } },
+      { "id": "C", "text": "Игнорировать и не вмешиваться.", "effects": { "food": 0, "reputation": 0, "army": 0, "technology": 0, "people": -2, "gold": 0 } },
+      { "id": "D", "text": "Провести учения и улучшить систему.", "effects": { "food": 0, "reputation": 5, "army": 0, "technology": 10, "people": 0, "gold": -10 } }
+    ]
+  },
+  {
+    "legend": "Бродячие артисты просят место на площади.",
+    "options": [
+      { "id": "A", "text": "Разрешить выступления — народ любит зрелища.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 0, "people": 10, "gold": -5 } },
+      { "id": "B", "text": "Запретить — шум и беспорядок.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": -5, "gold": 0 } },
+      { "id": "C", "text": "Требовать налог с представлений.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": -2, "gold": 10 } },
+      { "id": "D", "text": "Найти постоянное место и финансировать школу искусств.", "effects": { "food": 0, "reputation": 15, "army": 0, "technology": 0, "people": 10, "gold": -15 } }
+    ]
+  },
+  {
+    "legend": "Крепость на севере нуждается в ремонте.",
+    "options": [
+      { "id": "A", "text": "Выделить деньги и материалы.", "effects": { "food": 0, "reputation": 10, "army": 15, "technology": 0, "people": 0, "gold": -20 } },
+      { "id": "B", "text": "Оставить крепость в её текущем виде.", "effects": { "food": 0, "reputation": -10, "army": -10, "technology": 0, "people": 0, "gold": 0 } },
+      { "id": "C", "text": "Привлечь наёмников для охраны вместо ремонта.", "effects": { "food": 0, "reputation": -5, "army": 5, "technology": 0, "people": 0, "gold": -10 } },
+      { "id": "D", "text": "Продать крепость за границу.", "effects": { "food": 0, "reputation": -20, "army": -20, "technology": 0, "people": -5, "gold": 30 } }
+    ]
+  },
+  {
+    "legend": "Слухи о драконах в дальних горах.",
+    "options": [
+      { "id": "A", "text": "Отправить экспедицию — исследовать.", "effects": { "food": -5, "reputation": 10, "army": -5, "technology": 5, "people": 0, "gold": -10 } },
+      { "id": "B", "text": "Игнорировать слухи.", "effects": { "food": 0, "reputation": -5, "army": 0, "technology": 0, "people": 0, "gold": 0 } },
+      { "id": "C", "text": "Провести фестиваль в честь возможного чуда.", "effects": { "food": -10, "reputation": 15, "army": 0, "technology": 0, "people": 10, "gold": -5 } },
+      { "id": "D", "text": "Провозгласить охоту на дракона и собрать добровольцев.", "effects": { "food": 0, "reputation": -5, "army": 10, "technology": 0, "people": -5, "gold": -5 } }
+    ]
+  }
+]
+
