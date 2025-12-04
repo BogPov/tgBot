@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserSession {
     private final Long chatId;
@@ -40,7 +41,7 @@ public class UserSession {
                 + REPUTATION_ICON + resources.getReputation();
     }
 
-    public String getChangedResForTab(HashMap<String, Integer> resourceChange){
+    public String getChangedResForTab(Map<String, Integer> resourceChange){
         StringBuilder result = new StringBuilder();
 
         String[][] resources = {

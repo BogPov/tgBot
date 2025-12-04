@@ -47,7 +47,7 @@ public class BotServiceTest {
 
     //сессии нет, команда /start
     @Test
-    void StartNewUser() {
+    void startNewUser() {
         Message message = createMockMessage("/start", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(false);
         when(textManager.getText("welcome_message")).thenReturn("Welcome to the bot!");
@@ -59,7 +59,7 @@ public class BotServiceTest {
 
     //сессия есть, команда /start
     @Test
-    void StartExistingUser() {
+    void startExistingUser() {
         Message message = createMockMessage("/start", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -71,7 +71,7 @@ public class BotServiceTest {
 
     //существующий пользователь отправляет /play
     @Test
-    void PlayExistingUser() {
+    void playExistingUser() {
         Message message = createMockMessage("/play", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -84,7 +84,7 @@ public class BotServiceTest {
 
     //существующий пользователь отправляет /lore
     @Test
-    void LoreExistingUser() {
+    void loreExistingUser() {
         Message message = createMockMessage("/lore", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -97,7 +97,7 @@ public class BotServiceTest {
 
     //существующий пользователь отправляет /help
     @Test
-    void HelpExistingUser() {
+    void helpExistingUser() {
         Message message = createMockMessage("/help", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -110,7 +110,7 @@ public class BotServiceTest {
 
     //существующий пользователь отправляет /res
     @Test
-    void ResExistingUser() {
+    void resExistingUser() {
         Message message = createMockMessage("/res", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -123,7 +123,7 @@ public class BotServiceTest {
 
     //существующий пользователь отправляет /top
     @Test
-    void TopExistingUser() {
+    void topExistingUser() {
         Message message = createMockMessage("/top", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -149,7 +149,7 @@ public class BotServiceTest {
 
     //существующий пользователь отправляет неизвестную команду
     @Test
-    void UnknownCommand() {
+    void unknownCommand() {
         Message message = createMockMessage("/unknowncommand", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -161,7 +161,7 @@ public class BotServiceTest {
 
     //новый пользователь отправляет неизвестную команду
     @Test
-    void UnknownCommandNewUser() {
+    void unknownCommandNewUser() {
         Message message = createMockMessage("/unknowncommand", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(false);
 
@@ -174,7 +174,7 @@ public class BotServiceTest {
 
     //новый пользователь отправляет текст
     @Test
-    void NonCommandNoSession() {
+    void nonCommandNoSession() {
         Message message = createMockMessage("Hello!", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(false);
 
@@ -185,7 +185,7 @@ public class BotServiceTest {
 
     //существующий пользователь отправляет текст, но у него нет активного события
     @Test
-    void NoCurrentEvent() {
+    void noCurrentEvent() {
         Message message = createMockMessage("Text", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -198,7 +198,7 @@ public class BotServiceTest {
 
     //существующий пользователь отправляет вариант ответа на активное событие
     @Test
-    void ValidAnswer() {
+    void validAnswer() {
         Message message = createMockMessage("a", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -212,7 +212,7 @@ public class BotServiceTest {
 
     //нечувствительность к регистру
     @Test
-    void ValidAnswerCaseInsensitive() {
+    void validAnswerCaseInsensitive() {
         Message message = createMockMessage("A", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -226,7 +226,7 @@ public class BotServiceTest {
 
     //существующий пользователь отправляет не вариант ответа на активное событие
     @Test
-    void InvalidAnswer() {
+    void invalidAnswer() {
         Message message = createMockMessage("invalid", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
@@ -240,7 +240,7 @@ public class BotServiceTest {
 
     //проверка на число
     @Test
-    void InvalidAnswerDigit() {
+    void invalidAnswerDigit() {
         Message message = createMockMessage("1", CHAT_ID, USER_ID); // Проверка с цифрой
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
