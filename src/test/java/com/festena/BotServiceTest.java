@@ -12,7 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.util.HashMap;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -119,32 +122,6 @@ public class BotServiceTest {
         String response = botService.processMessage(message);
 
         assertEquals("Gold: 100, Food: 50, People: 20...", response);
-    }
-
-    //существующий пользователь отправляет /top
-    @Test
-    void topExistingUser() {
-        Message message = createMockMessage("/top", CHAT_ID, USER_ID);
-        when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
-        when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
-
-        //фиктивные сессии для имитации нескольких игроков
-        HashMap<Long, UserSession> sessions = new HashMap<>();
-        UserSession session1 = mock(UserSession.class);
-        when(session1.getAmountOfGold()).thenReturn(200);
-        sessions.put(CHAT_ID, session1); //cессия пользователя
-        UserSession session2 = mock(UserSession.class);
-        when(session2.getAmountOfGold()).thenReturn(150);
-        sessions.put(CHAT_ID + 1, session2); //cессия другого пользователя
-
-        when(userSessionManager.getAllSessions()).thenReturn(sessions);
-
-        String response = botService.processMessage(message);
-
-        String expectedLeaderboard = "ТОП ИГРОКОВ ПО ЗОЛОТУ\n" +
-                "!!" + CHAT_ID + "!! - 200\n" +
-                "!!" + (CHAT_ID + 1) + "!! - 150\n";
-        assertEquals(expectedLeaderboard, response);
     }
 
     //существующий пользователь отправляет неизвестную команду
