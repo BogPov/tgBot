@@ -6,10 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class UserSessionManager {
-    private HashMap<Long, UserSession> sessions = new HashMap<>();
+    private Map<Long, UserSession> sessions = new HashMap<>();
 
     private static final Logger log = LoggerFactory.getLogger(UserSessionManager.class);
 
@@ -26,7 +27,7 @@ public class UserSessionManager {
         return sessions.containsKey(chatId);
     }
 
-    public HashMap<Long, UserSession> getAllSessions(){
+    public Map<Long, UserSession> getAllSessions(){
         return sessions;
     }
 

@@ -5,7 +5,6 @@ import com.festena.service.TelegramBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class UserSession {
@@ -64,7 +63,7 @@ public class UserSession {
     }
 
     public String processPlayerAnswer(String playerResponse) {
-        HashMap<String, Integer> resourceChanges = eventManager.getResourceChanges(playerResponse);
+        Map<String, Integer> resourceChanges = eventManager.getResourceChanges(playerResponse);
         resources.addGold(resourceChanges.get("gold"));
         resources.addPeople(resourceChanges.get("people"));
         resources.addFood(resourceChanges.get("food"));

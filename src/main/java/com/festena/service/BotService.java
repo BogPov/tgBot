@@ -108,9 +108,9 @@ public class BotService {
     }
 
     String getOnlinePlayersLeaderboard() {
-        HashMap<Long, UserSession> sessions = userSessionManager.getAllSessions();
+        Map<Long, UserSession> sessions = userSessionManager.getAllSessions();
 
-        HashMap<Long, Integer> chatIdsWithGold = new HashMap<>();
+        Map<Long, Integer> chatIdsWithGold = new HashMap<>();
         for (Map.Entry<Long, UserSession> entry : sessions.entrySet()) {
             chatIdsWithGold.put(entry.getKey(), entry.getValue().getAmountOfGold());
         }

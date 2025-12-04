@@ -57,8 +57,8 @@ public class EventManager {
         return sb.toString();
     }
 
-    public HashMap<String, Integer> getResourceChanges(String id) {
-        HashMap<String, Integer> resourceChange = new HashMap<>();
+    public Map<String, Integer> getResourceChanges(String id) {
+        Map<String, Integer> resourceChange = new HashMap<>();
         resourceChange.put("gold", 0);
         resourceChange.put("people", 0);
         resourceChange.put("food", 0);
