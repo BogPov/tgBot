@@ -1,0 +1,11 @@
+[
+  {
+    "legend": "Послы чужеземного народа привезли странные устройства.",
+    "options": [
+      { "id": "A", "text": "Изучить их технологии.", "effects": { "food": 0, "reputation": 10, "army": 0, "technology": 15, "people": 0, "gold": -10 } },
+      { "id": "B", "text": "Запретить — это колдовство!", "effects": { "food": 0, "reputation": -10, "army": 0, "technology": -10, "people": -5, "gold": 0 } },
+      { "id": "C", "text": "Продать устройства на рынке.", "effects": { "food": 0, "reputation": 0, "army": 0, "technology": -5, "people": 0, "gold": 20 } },
+      { "id": "D", "text": "Попросить научить ваших учёных.", "effects": { "food": 0, "reputation": 15, "army": 0, "technology": 20, "people": 5, "gold": -15 } }
+    ]
+  }
+]
