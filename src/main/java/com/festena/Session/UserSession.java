@@ -12,7 +12,7 @@ public class UserSession {
     private final Long userId;
 
     private Resources resources;
-    private EventManager eventManager = new EventManager();
+    private EventManager eventManager;
 
     private static final Logger log = LoggerFactory.getLogger(TelegramBot.class);
 
@@ -25,10 +25,27 @@ public class UserSession {
     final private static String STRING_DIVIDOR = "\n\n";
 
     public UserSession(Long chatId, Long userId){
+        this(chatId, userId, new EventManager());
+    }
+
+    public UserSession(Long chatId, Long userId, EventManager eventManager){
         this.chatId = chatId;
         this.userId = userId;
         this.resources = new Resources();
+        this.eventManager = eventManager;
         log.info("Новая сессия c айди пользователя {} создана", userId);
+    }
+
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Resources getResources() { // Для доступа к ресурсам в тестах
+        return resources;
     }
 
     public String getResForTab() {
@@ -42,6 +59,7 @@ public class UserSession {
 
     public String getChangedResForTab(Map<String, Integer> resourceChange){
         StringBuilder result = new StringBuilder();
+        boolean firstChangeAdded = true;
 
         String[][] resources = {
                 {"people", PEOPLE_ICON},
@@ -88,71 +106,5 @@ public class UserSession {
     public String getNextEventText() {
         eventManager.startNewEvent();
         return eventManager.getCurrentEventText();
-    }
-}
-
-class Resources {
-    private int people;
-    private int food;
-    private int army;
-    private int gold;
-    private int reputation;
-    private int technology;
-
-    public Resources() {
-        this.people = 100;
-        this.army = 100;
-        this.food = 100;
-        this.gold = 1000;
-        this.reputation = 50;
-        this.technology = 0;
-    }
-
-    public int getPeople() {
-        return people;
-    }
-
-    public int getFood() {
-        return food;
-    }
-
-    public int getArmy() {
-        return army;
-    }
-
-    public int getGold() {
-        return gold;
-    }
-
-    public int getReputation() {
-        return reputation;
-    }
-
-    public int getTechnology() {
-        return technology;
-    }
-
-    public void addPeople(int delta) {
-        this.people += delta;
-    }
-
-    public void addFood(int delta) {
-        this.food += delta;
-    }
-
-    public void addArmy(int delta) {
-        this.army += delta;
-    }
-
-    public void addGold(int delta) {
-        this.gold += delta;
-    }
-
-    public void addReputation(int delta) {
-        this.reputation += delta;
-    }
-
-    public void addTechnology(int delta) {
-        this.technology += delta;
     }
 }
