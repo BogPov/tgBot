@@ -53,4 +53,22 @@ class UserSessionManagerTest {
     void isSessionExistShouldReturnFalseForNonExistingSession() {
         assertFalse(userSessionManager.isSessionExist(999L));
     }
+
+    @Test
+    void removeSession() {
+        Long chatIdToRemove = 789L;
+        Long userIdToRemove = 1011L;
+        userSessionManager.addSession(chatIdToRemove, userIdToRemove);//для удаления
+        userSessionManager.addSession(1L, 2L); //чтобы убедиться, что удаляется нужная сессия
+
+        //существует до удаления
+        assertTrue(userSessionManager.isSessionExist(chatIdToRemove));
+        assertEquals(2, userSessionManager.getAllSessions().size());
+
+        userSessionManager.removeSession(chatIdToRemove);
+
+        assertFalse(userSessionManager.isSessionExist(chatIdToRemove));
+        assertEquals(1, userSessionManager.getAllSessions().size());
+        assertTrue(userSessionManager.isSessionExist(1L));
+    }
 }
