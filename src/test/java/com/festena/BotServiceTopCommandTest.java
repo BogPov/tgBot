@@ -2,23 +2,29 @@ package com.festena;
 
 import com.festena.manager.UserSessionManager;
 import com.festena.service.BotService;
+import com.festena.manager.TextManager;
+
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.BeforeEach;
+
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 class BotServiceTopCommandTest {
 
-    @Autowired
     private BotService botService;
-
-    @Autowired
     private UserSessionManager userSessionManager;
+    private TextManager textManager;
+
+    @BeforeEach
+    void setup() {
+        userSessionManager = new UserSessionManager();
+        textManager = new TextManager(); // или мок
+        botService = new BotService(userSessionManager, textManager);
+    }
 
     private Message createMessage(String text, Long chatId, Long userId) {
         Message message = mock(Message.class);
