@@ -2,10 +2,9 @@ package com.festena.manager;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.List;
 
@@ -19,27 +18,19 @@ class EventManagerTest {
     }
 
     @Test
-    void testConstructorLoadsEvents() throws Exception {
-        Field storageField = EventManager.class.getDeclaredField("eventStorage");
-        storageField.setAccessible(true);
-        List<?> storage = (List<?>) storageField.get(eventManager);
+    void testConstructorLoadsEvents() {
+        List<Event> storage = eventManager.getEventStorage();
 
         assertNotNull(storage);
         assertFalse(storage.isEmpty());
     }
 
     @Test
-    void testSetCurrentEvent() throws Exception {
-        Event event = new Event();
-        Field legendField = Event.class.getDeclaredField("legend");
-        legendField.setAccessible(true);
-        legendField.set(event, "Test Legend");
-
+    void testSetCurrentEvent() {
+        Event event = new Event("Test Legend");
         eventManager.setCurrentEvent(event);
 
-        Field currentEventField = EventManager.class.getDeclaredField("currentEvent");
-        currentEventField.setAccessible(true);
-        Event currentEvent = (Event) currentEventField.get(eventManager);
+        Event currentEvent = eventManager.getCurrentEvent();
 
         assertSame(event, currentEvent);
     }
@@ -50,7 +41,7 @@ class EventManagerTest {
     }
 
     @Test
-    void testGetCurrentEventTextWithEvent() throws Exception {
+    void testGetCurrentEventTextWithEvent() {
         eventManager.startNewEvent();
         String text = eventManager.getCurrentEventText();
 
@@ -58,14 +49,9 @@ class EventManagerTest {
         assertFalse(text.isEmpty());
 
         // Проверяем что метод не падает с null options
-        Event eventWithNullOptions = new Event();
-        Field legendField = Event.class.getDeclaredField("legend");
-        legendField.setAccessible(true);
-        legendField.set(eventWithNullOptions, "Legend");
+        Event eventWithNullOptions = new Event("Legend");
+        eventWithNullOptions.setOptions(null);
 
-        Field optionsField = Event.class.getDeclaredField("options");
-        optionsField.setAccessible(true);
-        optionsField.set(eventWithNullOptions, null);
 
         eventManager.setCurrentEvent(eventWithNullOptions);
         text = eventManager.getCurrentEventText();
@@ -74,44 +60,33 @@ class EventManagerTest {
     }
 
     @Test
-    void testStartNewEvent() throws Exception {
+    void testStartNewEvent() {
         eventManager.startNewEvent();
 
-        Field currentEventField = EventManager.class.getDeclaredField("currentEvent");
-        currentEventField.setAccessible(true);
-        Event currentEvent = (Event) currentEventField.get(eventManager);
+        Event currentEvent = eventManager.getCurrentEvent();
 
         assertNotNull(currentEvent);
     }
 
     @Test
-    void testStartNewEventThrowsWhenEmpty() throws Exception {
-        Field storageField = EventManager.class.getDeclaredField("eventStorage");
-        storageField.setAccessible(true);
-        List<?> storage = (List<?>) storageField.get(eventManager);
+    void testStartNewEventThrowsWhenEmpty() {
+        List<Event> storage = eventManager.getEventStorage();
         storage.clear();
 
         assertThrows(IllegalStateException.class, () -> eventManager.startNewEvent());
     }
 
     @Test
-    void testGetResourceChangesForExistingOption() throws Exception {
+    void testGetResourceChangesForExistingOption() {
         eventManager.startNewEvent();
 
         // Получаем текущее событие чтобы узнать какие опции есть
-        Field currentEventField = EventManager.class.getDeclaredField("currentEvent");
-        currentEventField.setAccessible(true);
-        Event currentEvent = (Event) currentEventField.get(eventManager);
-
-        Field optionsField = Event.class.getDeclaredField("options");
-        optionsField.setAccessible(true);
-        List<Option> options = (List<Option>) optionsField.get(currentEvent);
+        Event currentEvent = eventManager.getCurrentEvent();
+        List<Option> options = currentEvent.getOptions();
 
         if (options != null && !options.isEmpty()) {
             // Берем первую опцию
-            Field idField = Option.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            String firstOptionId = (String) idField.get(options.get(0));
+            String firstOptionId = options.get(0).getId();
 
             Map<String, Integer> changes = eventManager.getResourceChanges(firstOptionId);
 
@@ -157,21 +132,14 @@ class EventManagerTest {
     }
 
     @Test
-    void testGetResourceChangesWithSpacesInId() throws Exception {
+    void testGetResourceChangesWithSpacesInId() {
         eventManager.startNewEvent();
 
-        Field currentEventField = EventManager.class.getDeclaredField("currentEvent");
-        currentEventField.setAccessible(true);
-        Event currentEvent = (Event) currentEventField.get(eventManager);
-
-        Field optionsField = Event.class.getDeclaredField("options");
-        optionsField.setAccessible(true);
-        List<Option> options = (List<Option>) optionsField.get(currentEvent);
+        Event currentEvent = eventManager.getCurrentEvent();
+        List<Option> options = currentEvent.getOptions();
 
         if (options != null && !options.isEmpty()) {
-            Field idField = Option.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            String firstOptionId = (String) idField.get(options.get(0));
+            String firstOptionId = options.get(0).getId();
 
             // Проверяем с пробелами
             Map<String, Integer> changes1 = eventManager.getResourceChanges(" " + firstOptionId + " ");
@@ -183,15 +151,9 @@ class EventManagerTest {
     }
 
     @Test
-    void testGetResourceChangesWithNullOptions() throws Exception {
-        Event event = new Event();
-        Field legendField = Event.class.getDeclaredField("legend");
-        legendField.setAccessible(true);
-        legendField.set(event, "Test");
-
-        Field optionsField = Event.class.getDeclaredField("options");
-        optionsField.setAccessible(true);
-        optionsField.set(event, null);
+    void testGetResourceChangesWithNullOptions() {
+        Event event = new Event("Test");
+        event.setOptions(null);
 
         eventManager.setCurrentEvent(event);
 
@@ -202,60 +164,30 @@ class EventManagerTest {
     }
 
     @Test
-    void testEventGetters() throws Exception {
+    void testEventGetters() {
         Event event = new Event();
-
-        Field legendField = Event.class.getDeclaredField("legend");
-        legendField.setAccessible(true);
-        legendField.set(event, "Legend");
-
-        Field optionsField = Event.class.getDeclaredField("options");
-        optionsField.setAccessible(true);
-        optionsField.set(event, null);
+        event.setLegend("Legend");
+        event.setOptions(null);
 
         assertEquals("Legend", event.getLegend());
         assertNull(event.getOptions());
 
         // С options
-        optionsField.set(event, List.of());
+        event.setOptions(List.of());
         assertNotNull(event.getOptions());
     }
 
     @Test
-    void testOptionGetters() throws Exception {
+    void testOptionGetters() {
         Option option = new Option();
-
-        Field idField = Option.class.getDeclaredField("id");
-        idField.setAccessible(true);
-        idField.set(option, "ID");
-
-        Field textField = Option.class.getDeclaredField("text");
-        textField.setAccessible(true);
-        textField.set(option, "Text");
-
-        Field goldField = Option.class.getDeclaredField("gold");
-        goldField.setAccessible(true);
-        goldField.set(option, 100);
-
-        Field peopleField = Option.class.getDeclaredField("people");
-        peopleField.setAccessible(true);
-        peopleField.set(option, 50);
-
-        Field foodField = Option.class.getDeclaredField("food");
-        foodField.setAccessible(true);
-        foodField.set(option, 30);
-
-        Field armyField = Option.class.getDeclaredField("army");
-        armyField.setAccessible(true);
-        armyField.set(option, 20);
-
-        Field technologyField = Option.class.getDeclaredField("technology");
-        technologyField.setAccessible(true);
-        technologyField.set(option, 10);
-
-        Field reputationField = Option.class.getDeclaredField("reputation");
-        reputationField.setAccessible(true);
-        reputationField.set(option, 5);
+        option.setId("ID");
+        option.setText("Text");
+        option.setGold(100);
+        option.setPeople(50);
+        option.setFood(30);
+        option.setArmy(20);
+        option.setTechnology(10);
+        option.setReputation(5);
 
         assertEquals("ID", option.getId());
         assertEquals("Text", option.getText());
@@ -268,11 +200,8 @@ class EventManagerTest {
     }
 
     @Test
-    void testOptionUnpackEffects() throws Exception {
+    void testOptionUnpackEffects() {
         Option option = new Option();
-
-        Method unpackEffectsMethod = Option.class.getDeclaredMethod("unpackEffects", Map.class);
-        unpackEffectsMethod.setAccessible(true);
 
         // Полный Map
         Map<String, Integer> fullEffects = Map.of(
@@ -284,7 +213,7 @@ class EventManagerTest {
                 "reputation", 5
         );
 
-        unpackEffectsMethod.invoke(option, fullEffects);
+        option.unpackEffects(fullEffects);
 
         assertEquals(100, option.getGold());
         assertEquals(50, option.getPeople());
@@ -295,14 +224,11 @@ class EventManagerTest {
     }
 
     @Test
-    void testOptionUnpackEffectsWithNull() throws Exception {
+    void testOptionUnpackEffectsWithNull() {
         Option option = new Option();
 
-        Method unpackEffectsMethod = Option.class.getDeclaredMethod("unpackEffects", Map.class);
-        unpackEffectsMethod.setAccessible(true);
-
         // null Map
-        unpackEffectsMethod.invoke(option, new Object[]{null});
+        option.unpackEffects(null);
 
         assertEquals(0, option.getGold());
         assertEquals(0, option.getPeople());
@@ -313,11 +239,8 @@ class EventManagerTest {
     }
 
     @Test
-    void testOptionUnpackEffectsPartial() throws Exception {
+    void testOptionUnpackEffectsPartial() {
         Option option = new Option();
-
-        Method unpackEffectsMethod = Option.class.getDeclaredMethod("unpackEffects", Map.class);
-        unpackEffectsMethod.setAccessible(true);
 
         // Неполный Map
         Map<String, Integer> partialEffects = Map.of(
@@ -325,7 +248,7 @@ class EventManagerTest {
                 "food", 50
         );
 
-        unpackEffectsMethod.invoke(option, partialEffects);
+        option.unpackEffects(partialEffects);
 
         assertEquals(100, option.getGold());
         assertEquals(0, option.getPeople()); // default

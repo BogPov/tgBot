@@ -35,6 +35,14 @@ public class EventManager {
         }
     }
 
+    public List<Event> getEventStorage() {
+        return eventStorage;
+    }
+
+    public Event getCurrentEvent() {
+        return currentEvent;
+    }
+
     public void setCurrentEvent(Event event) {
         this.currentEvent = event;
     }
@@ -87,6 +95,19 @@ class Event {
     private String legend;
     private List<Option> options;
 
+    public Event(String legend, List<Option> options){
+        this.legend = legend;
+        this.options = options;
+    }
+
+    public void setLegend(String legend){
+        this.legend = legend;
+    }
+
+    public Event(String legend) {
+        this.legend = legend;
+    }
+
     // пустой конструктор нужен Jackson'y
     public Event() {
     }
@@ -97,6 +118,10 @@ class Event {
 
     public List<Option> getOptions() {
         return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 }
 
@@ -112,36 +137,68 @@ class Option {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getText() {
         return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getGold() {
         return gold;
     }
 
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
     public int getPeople() {
         return people;
+    }
+
+    public void setPeople(int people) {
+        this.people = people;
     }
 
     public int getFood() {
         return food;
     }
 
+    public void setFood(int food) {
+        this.food = food;
+    }
+
     public int getArmy() {
         return army;
+    }
+
+    public void setArmy(int army) {
+        this.army = army;
     }
 
     public int getTechnology() {
         return technology;
     }
 
+    public void setTechnology(int technology) {
+        this.technology = technology;
+    }
+
     public int getReputation() {
         return reputation;
     }
 
+    public void setReputation(int reputation) {
+        this.reputation = reputation;
+    }
+
     @JsonProperty("effects")
-    private void unpackEffects(Map<String, Integer> effects) {
+    void unpackEffects(Map<String, Integer> effects) {
         if (effects == null) return;
         this.gold = effects.getOrDefault("gold", 0);
         this.people = effects.getOrDefault("people", 0);
