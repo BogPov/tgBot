@@ -12,30 +12,39 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class BotService {
+    // комманды
     final private static String COMMAND_SYMBOL = "/";
-    final private static String BOT_START_COMMAND = "/start";
-    final private static String RUN_GAME_COMMAND = "/play";
-    final private static String SHOW_LORE_COMMAND = "/lore";
-    final private static String SHOW_HELP_COMMAND = "/help";
-    final private static String SHOW_PLAYER_RESOURCES_COMMAND = "/res";
-    final private static String SHOW_LEADERBOARD_COMMAND = "/top";
-    final private static String UNKNOWN_COMMAND_MESSAGE = "бро, я такой команды не знаю. Напиши /help";
+    final public static String BOT_START_COMMAND = "/start";
+    final public static String RUN_GAME_COMMAND = "/play";
+    final public static String SHOW_LORE_COMMAND = "/lore";
+    final public static String SHOW_HELP_COMMAND = "/help";
+    final public static String SHOW_PLAYER_RESOURCES_COMMAND = "/res";
+    final public static String SHOW_LEADERBOARD_COMMAND = "/top";
+    final public static String UNKNOWN_COMMAND_MESSAGE = "бро, я такой команды не знаю. Напиши /help";
 
+    // ключи для TextManager
     final private static String WELCOME_MESSAGE = "welcome_message";
     final private static String LORE_MESSAGE = "lore";
     final private static String HELP_MESSAGE = "help";
+
+    // Предупреждения
     final private static String START_BOT_FIRST_WARNING = "Перед тем как отправлять сообщения запусти бота!: /start";
     final private static String CORRECT_ANSWER_WARNING = "Ответ на событие должен быть написан одной латинцкой буквой!";
     final private static String START_EVENT_FIRST_WARNING = "Перед тем как писать сообщения, начни игру: /play";
-
     final private static String START_COMMAND_ABUSE_MESSAGE = "Бро, ты уже запустил бота!";
     final private static String EMPTY_STRING = "";
-    // при отправке сообщения строка обрабатывается на ключение этой строки, и разбивает сообщение на несколько
-    final private static String STRING_DIVIDOR = "\n\n";
+
+    // спец символы
+    final public static String STRING_DIVIDOR = "\n\n";
+    final public static String NEED_ANSWER_BTNS_SYMBOL = "@@@";
+
+    // Строки с состояниями игры
+    final public static String DIDNT_STARTED_STATE = "DIDNT_STARTED";
+    final public static String IS_PLAYING_STATE_STATE = "IS_PLAYING";
+    final public static String STARTED_BUT_DONT_PLAY_STATE = "STARTED_BUT_DONT_PLAY";
 
     final private UserSessionManager userSessionManager;
     final private TextManager textManager;
@@ -59,15 +68,27 @@ public class BotService {
         UserSession session = userSessionManager.getUserSession(chatId);
         if (session.hasCurrentEvent()) {
             if (messageText.matches("(?i)[abcd]")) {
-                return session.processPlayerAnswer(messageText);
+                return session.processPlayerAnswer(messageText) + NEED_ANSWER_BTNS_SYMBOL;
             } else {
-                return CORRECT_ANSWER_WARNING + STRING_DIVIDOR + session.getCurrentEventText();
+                return CORRECT_ANSWER_WARNING + STRING_DIVIDOR + NEED_ANSWER_BTNS_SYMBOL +  session.getCurrentEventText();
             }
         } else {
             return START_EVENT_FIRST_WARNING;
         }
     }
 
+    public String getUserState(Long chatId){
+        if (userSessionManager.isSessionExist(chatId)){
+            UserSession session = userSessionManager.getUserSession(chatId);
+            if (session.hasCurrentEvent()){
+                return IS_PLAYING_STATE_STATE;
+            } else{
+                return STARTED_BUT_DONT_PLAY_STATE;
+            }
+        } else{
+            return DIDNT_STARTED_STATE;
+        }
+    }
     private String processCommand(Message message) {
         Long chatId = message.getChatId();
         String messageText = message.getText();
@@ -86,7 +107,7 @@ public class BotService {
                     return START_COMMAND_ABUSE_MESSAGE;
                 }
                 case RUN_GAME_COMMAND -> {
-                    return session.getNextEventText();
+                    return NEED_ANSWER_BTNS_SYMBOL + session.getNextEventText();
                 }
                 case SHOW_PLAYER_RESOURCES_COMMAND -> {
                     return session.getResForTab();
@@ -118,7 +139,7 @@ public class BotService {
         List<Map.Entry<Long, Integer>> sortedByGold = chatIdsWithGold.entrySet()
                 .stream()
                 .sorted(Map.Entry.<Long, Integer>comparingByValue().reversed())
-                .collect(Collectors.toList());
+                .toList();
 
         StringBuilder result = new StringBuilder();
         result.append("ТОП ИГРОКОВ ПО ЗОЛОТУ\n");
