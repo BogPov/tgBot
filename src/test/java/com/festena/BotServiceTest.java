@@ -75,7 +75,7 @@ public class BotServiceTest {
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
         when(userSession.getNextEventText()).thenReturn("New event started: Choose wisely!");
 
-        String response = botService.processMessage(message);
+        String response = botService.processMessage(message).replace("@@@", "");
 
         assertEquals("New event started: Choose wisely!", response);
     }
@@ -177,7 +177,7 @@ public class BotServiceTest {
         when(userSession.hasCurrentEvent()).thenReturn(true);
         when(userSession.processPlayerAnswer("a")).thenReturn("You chose 'a'");
 
-        String response = botService.processMessage(message);
+        String response = botService.processMessage(message).replace("@@@", "");
 
         assertEquals("You chose 'a'", response);
     }
@@ -191,7 +191,7 @@ public class BotServiceTest {
         when(userSession.hasCurrentEvent()).thenReturn(true);
         when(userSession.processPlayerAnswer("A")).thenReturn("You chose 'A'");
 
-        String response = botService.processMessage(message);
+        String response = botService.processMessage(message).replace("@@@", "");
 
         assertEquals("You chose 'A'", response);
     }
@@ -205,7 +205,7 @@ public class BotServiceTest {
         when(userSession.hasCurrentEvent()).thenReturn(true);
         when(userSession.getCurrentEventText()).thenReturn("Current event: What will you do?");
 
-        String response = botService.processMessage(message);
+        String response = botService.processMessage(message).replace("@@@", "");
 
         assertEquals("Ответ на событие должен быть написан одной латинцкой буквой!\n\nCurrent event: What will you do?", response);
     }
@@ -219,7 +219,7 @@ public class BotServiceTest {
         when(userSession.hasCurrentEvent()).thenReturn(true);
         when(userSession.getCurrentEventText()).thenReturn("Current event: Choose option 1, 2, 3, or 4.");
 
-        String response = botService.processMessage(message);
+        String response = botService.processMessage(message).replace("@@@", "");
 
         assertEquals("Ответ на событие должен быть написан одной латинцкой буквой!\n\nCurrent event: Choose option 1, 2, 3, or 4.", response);
     }
