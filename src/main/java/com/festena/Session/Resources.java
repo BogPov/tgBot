@@ -64,4 +64,16 @@ public class Resources {
     public void addTechnology(int delta) {
         this.technology += delta;
     }
+
+    public void setGold(int gold){ this.gold = gold; };
+
+    public void setArmy(int army){ this.army = army; };
+
+    public void setFood(int food){ this.food = food; };
+
+    public void setPeople(int people){ this.people = people; };
+
+    public void setReputation(int reputation){ this.reputation = reputation; };
+
+    public void setTechnology(int technology){ this.technology = technology; };
 }

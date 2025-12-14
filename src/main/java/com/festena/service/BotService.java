@@ -1,13 +1,11 @@
 package com.festena.service;
 
 import com.festena.Session.UserSession;
+import com.festena.manager.DataBaseManager;
 import com.festena.manager.TextManager;
 import com.festena.manager.UserSessionManager;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,19 +46,23 @@ public class BotService {
 
     final private UserSessionManager userSessionManager;
     final private TextManager textManager;
-    private static final Logger log = LoggerFactory.getLogger(BotService.class);
+    private final DataBaseManager dbManager;
+
 
     public BotService(UserSessionManager userSessionManager, TextManager textManager) {
         this.userSessionManager = userSessionManager;
         this.textManager = textManager;
+        this.dbManager = new DataBaseManager();
     }
 
     public String processMessage(Message message) {
         String messageText = message.getText();
         Long chatId = message.getChatId();
+
         if (isMessageCommand(messageText)) {
             return this.processCommand(message);
         }
+
         if (!userSessionManager.isSessionExist(chatId)) {
             return START_BOT_FIRST_WARNING;
         }
@@ -113,7 +115,7 @@ public class BotService {
                     return session.getResForTab();
                 }
                 case SHOW_LEADERBOARD_COMMAND -> {
-                    return this.getOnlinePlayersLeaderboard();
+                    return this.getOverAllPlayersLeaderboard(10);
                 }
                 default -> {
                     return UNKNOWN_COMMAND_MESSAGE;
@@ -149,6 +151,24 @@ public class BotService {
                     .append("!! - ")
                     .append(entry.getValue())
                     .append("\n");
+        }
+        return result.toString();
+    }
+
+    public String getOverAllPlayersLeaderboard(int limit){
+        Map<Long, Integer> top = dbManager.getTopPlayers(limit);
+        StringBuilder result = new StringBuilder();
+        result.append("ТОП ИГРОКОВ ПО ЗОЛОТУ\n");
+        int counter = 1;
+        for (Map.Entry<Long, Integer> entry : top.entrySet()){
+            result.append(counter)
+                    .append(": ")
+                    .append("!!")
+                    .append(entry.getKey())
+                    .append("!! - ")
+                    .append(entry.getValue())
+                    .append("\n");
+            counter++;
         }
         return result.toString();
     }
