@@ -1,0 +1,24 @@
+[phases.setup]
+cmds = [
+    "mise use --global java@temurin-21",
+    "mise use --global maven"
+]
+
+[phases.install]
+cmds = [
+    "cat > src/main/resources/application.properties << 'EOF'",
+    "bot.token=${BOT_TOKEN}",
+    "bot.name=${BOT_NAME}",
+    "server.port=${PORT:-8080}",
+    "EOF",
+    "mvn clean install -DskipTests"
+]
+
+[phases.build]
+cmds = ["mvn package -DskipTests"]
+
+[variables]
+PORT = "8080"
+
+[start]
+cmd = "java -jar target/*.jar"

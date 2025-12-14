@@ -17,7 +17,7 @@ public class DataBaseManager {
     public static final String TECHNOLOGY_KEY = "technology";
 
     public DataBaseManager(){
-        URL = System.getenv("DB_URL");
+        URL = "jdbc:" + System.getenv("DB_URL");
         USERNAME = System.getenv("DB_USERNAME");
         PASSWORD = System.getenv("DB_PASSWORD");
         this.createTable();
