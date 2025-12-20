@@ -96,6 +96,10 @@ public class UserSession {
         return !eventManager.getCurrentEventText().isEmpty();
     }
 
+    public void addGold(Integer amount){
+        resources.addGold(amount);
+    }
+
     public Integer getAmountOfGold(){
         return resources.getGold();
     }

@@ -1,7 +1,7 @@
 package com.festena;
 
 import com.festena.Session.UserSession;
-import com.festena.databases.PlayersResDB;
+import com.festena.manager.EnergyManager;
 import com.festena.manager.TextManager;
 import com.festena.manager.UserSessionManager;
 import com.festena.service.BotService;
@@ -25,15 +25,14 @@ public class BotServiceTest {
     private TextManager textManager;
     @Mock
     private UserSession userSession;
+    @Mock
+    private EnergyManager energyManager;
 
     @InjectMocks
     private BotService botService;
 
-    @Mock
-    PlayersResDB dbManager;
-
-    private final Long CHAT_ID = 12345L;
-    private final Long USER_ID = 67890L;
+    private static final Long CHAT_ID = 12345L;
+    private static final Long USER_ID = 67890L;
 
     private Message createMockMessage(String text, Long chatId, Long userId) {
         Message message = mock(Message.class);
@@ -47,7 +46,22 @@ public class BotServiceTest {
         return message;
     }
 
-    //сессии нет, команда /start
+    private static String stripLuckSuffix(String response) {
+        int idx = response.indexOf(BotService.STRING_DIVIDOR);
+        if (idx >= 0) return response.substring(0, idx);
+        return response;
+    }
+
+    private static String stripNeedAnswerBtns(String response) {
+        return response.replace(BotService.NEED_ANSWER_BTNS_SYMBOL, "");
+    }
+
+    private static boolean isLuckMessage(String s) {
+        return s.contains("Вам повезло и вы выбили день на отдых +10 энергии")
+                || s.contains("Вам повезло и вы выбили полдня на отдых +5 энергии")
+                || s.contains("Вам повезло и вы выбили часок на отдых +1 энергия");
+    }
+
     @Test
     void startNewUser() {
         Message message = createMockMessage("/start", CHAT_ID, USER_ID);
@@ -59,7 +73,6 @@ public class BotServiceTest {
         assertEquals("Welcome to the bot!", response);
     }
 
-    //сессия есть, команда /start
     @Test
     void startExistingUser() {
         Message message = createMockMessage("/start", CHAT_ID, USER_ID);
@@ -71,7 +84,6 @@ public class BotServiceTest {
         assertEquals("Бро, ты уже запустил бота!", response);
     }
 
-    //существующий пользователь отправляет /play
     @Test
     void playExistingUser() {
         Message message = createMockMessage("/play", CHAT_ID, USER_ID);
@@ -79,12 +91,11 @@ public class BotServiceTest {
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
         when(userSession.getNextEventText()).thenReturn("New event started: Choose wisely!");
 
-        String response = botService.processMessage(message).replace("@@@", "");
+        String response = botService.processMessage(message);
 
-        assertEquals("New event started: Choose wisely!", response);
+        assertEquals("New event started: Choose wisely!", stripNeedAnswerBtns(response));
     }
 
-    //существующий пользователь отправляет /lore
     @Test
     void loreExistingUser() {
         Message message = createMockMessage("/lore", CHAT_ID, USER_ID);
@@ -97,7 +108,6 @@ public class BotServiceTest {
         assertEquals("This is the rich lore of the game.", response);
     }
 
-    //существующий пользователь отправляет /help
     @Test
     void helpExistingUser() {
         Message message = createMockMessage("/help", CHAT_ID, USER_ID);
@@ -110,7 +120,6 @@ public class BotServiceTest {
         assertEquals("Available commands: /start, /play, /help...", response);
     }
 
-    //существующий пользователь отправляет /res
     @Test
     void resExistingUser() {
         Message message = createMockMessage("/res", CHAT_ID, USER_ID);
@@ -123,7 +132,6 @@ public class BotServiceTest {
         assertEquals("Gold: 100, Food: 50, People: 20...", response);
     }
 
-    //существующий пользователь отправляет неизвестную команду
     @Test
     void unknownCommand() {
         Message message = createMockMessage("/unknowncommand", CHAT_ID, USER_ID);
@@ -132,10 +140,9 @@ public class BotServiceTest {
 
         String response = botService.processMessage(message);
 
-        assertEquals("бро, я такой команды не знаю. Напиши /help", response, "Должно быть возвращено сообщение о неизвестной команде.");
+        assertEquals("бро, я такой команды не знаю. Напиши /help", response);
     }
 
-    //новый пользователь отправляет неизвестную команду
     @Test
     void unknownCommandNewUser() {
         Message message = createMockMessage("/unknowncommand", CHAT_ID, USER_ID);
@@ -146,9 +153,6 @@ public class BotServiceTest {
         assertEquals("", response);
     }
 
-    //тесты обработки некомандных сообщений
-
-    //новый пользователь отправляет текст
     @Test
     void nonCommandNoSession() {
         Message message = createMockMessage("Hello!", CHAT_ID, USER_ID);
@@ -159,7 +163,6 @@ public class BotServiceTest {
         assertEquals("Перед тем как отправлять сообщения запусти бота!: /start", response);
     }
 
-    //существующий пользователь отправляет текст, но у него нет активного события
     @Test
     void noCurrentEvent() {
         Message message = createMockMessage("Text", CHAT_ID, USER_ID);
@@ -172,35 +175,44 @@ public class BotServiceTest {
         assertEquals("Перед тем как писать сообщения, начни игру: /play", response);
     }
 
-    //существующий пользователь отправляет вариант ответа на активное событие
     @Test
     void validAnswer() {
         Message message = createMockMessage("a", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
         when(userSession.hasCurrentEvent()).thenReturn(true);
+        when(energyManager.couldPlayerMakeATerm(CHAT_ID)).thenReturn(true);
         when(userSession.processPlayerAnswer("a")).thenReturn("You chose 'a'");
 
-        String response = botService.processMessage(message).replace("@@@", "");
+        String response = botService.processMessage(message);
 
-        assertEquals("You chose 'a'", response);
+        response = stripLuckSuffix(response);
+
+        assertEquals("You chose 'a'", stripNeedAnswerBtns(response));
+        verify(userSessionManager).updatePlayerInDB(CHAT_ID);
+        verify(energyManager).addEnergyToPlayer(CHAT_ID, -1);
     }
 
-    //нечувствительность к регистру
     @Test
     void validAnswerCaseInsensitive() {
         Message message = createMockMessage("A", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
         when(userSession.hasCurrentEvent()).thenReturn(true);
+        when(energyManager.couldPlayerMakeATerm(CHAT_ID)).thenReturn(true);
         when(userSession.processPlayerAnswer("A")).thenReturn("You chose 'A'");
 
-        String response = botService.processMessage(message).replace("@@@", "");
+        String response = botService.processMessage(message);
 
-        assertEquals("You chose 'A'", response);
+        String withoutLuck = stripLuckSuffix(response);
+
+        assertEquals("You chose 'A'", stripNeedAnswerBtns(withoutLuck));
+        if (!withoutLuck.equals(response)) {
+            String luckPart = response.substring(withoutLuck.length());
+            assertEquals(true, isLuckMessage(luckPart));
+        }
     }
 
-    //существующий пользователь отправляет не вариант ответа на активное событие
     @Test
     void invalidAnswer() {
         Message message = createMockMessage("invalid", CHAT_ID, USER_ID);
@@ -209,22 +221,21 @@ public class BotServiceTest {
         when(userSession.hasCurrentEvent()).thenReturn(true);
         when(userSession.getCurrentEventText()).thenReturn("Current event: What will you do?");
 
-        String response = botService.processMessage(message).replace("@@@", "");
+        String response = botService.processMessage(message);
 
-        assertEquals("Ответ на событие должен быть написан одной латинцкой буквой!\n\nCurrent event: What will you do?", response);
+        assertEquals("Ответ на событие должен быть написан одной латинцкой буквой!\n\n@@@Current event: What will you do?", response);
     }
 
-    //проверка на число
     @Test
     void invalidAnswerDigit() {
-        Message message = createMockMessage("1", CHAT_ID, USER_ID); // Проверка с цифрой
+        Message message = createMockMessage("1", CHAT_ID, USER_ID);
         when(userSessionManager.isSessionExist(CHAT_ID)).thenReturn(true);
         when(userSessionManager.getUserSession(CHAT_ID)).thenReturn(userSession);
         when(userSession.hasCurrentEvent()).thenReturn(true);
         when(userSession.getCurrentEventText()).thenReturn("Current event: Choose option 1, 2, 3, or 4.");
 
-        String response = botService.processMessage(message).replace("@@@", "");
+        String response = botService.processMessage(message);
 
-        assertEquals("Ответ на событие должен быть написан одной латинцкой буквой!\n\nCurrent event: Choose option 1, 2, 3, or 4.", response);
+        assertEquals("Ответ на событие должен быть написан одной латинцкой буквой!\n\n@@@Current event: Choose option 1, 2, 3, or 4.", response);
     }
 }

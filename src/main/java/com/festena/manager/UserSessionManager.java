@@ -15,22 +15,33 @@ public class UserSessionManager {
     private final Map<Long, UserSession> sessions = new HashMap<>();
 
     private static final Logger log = LoggerFactory.getLogger(UserSessionManager.class);
-    PlayersResDB playersTable;
 
-    public UserSessionManager(PlayersResDB playersTable){
+    private final EnergyManager energyManager;
+    private final PlayersResDB playersTable;
+
+    public UserSessionManager(PlayersResDB playersTable, EnergyManager energyManager){
         log.info("Менеджер сессий создан!");
         this.playersTable = playersTable;
+        this.energyManager = energyManager;
     }
 
     public void addSession(Long chatID, Long userId){
         UserSession session = new UserSession(chatID, userId);
         sessions.put(chatID, session);
+        energyManager.addNewPlayer(chatID);
         if (playersTable.isPlayerExists(chatID)){
             Map<String, Integer> dbRes = playersTable.getPlayerData(chatID);
             session.updateRes(dbRes);
         } else{
             insertNewPlayerInDB(chatID, session);
         }
+    }
+
+    public void addGoldToPlayer(Long chatId, Integer amount){
+        UserSession session = getUserSession(chatId);
+        session.addGold(amount);
+        int current_gold = playersTable.getPlayerValue(chatId, PlayersResDB.GOLD_KEY);
+        playersTable.updatePlayerField(chatId, PlayersResDB.GOLD_KEY, amount + current_gold);
     }
 
     public void updatePlayerInDB(Long chatId){

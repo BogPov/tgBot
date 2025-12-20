@@ -2,6 +2,7 @@ package com.festena;
 
 import com.festena.Session.UserSession;
 import com.festena.databases.PlayersResDB;
+import com.festena.manager.EnergyManager;
 import com.festena.manager.UserSessionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,11 +19,14 @@ class UserSessionManagerTest {
     @Mock
     private PlayersResDB playersResDB;
 
+    @Mock
+    private EnergyManager energyManager;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         when(playersResDB.isPlayerExists(anyLong())).thenReturn(false);
-        userSessionManager = new UserSessionManager(playersResDB);
+        userSessionManager = new UserSessionManager(playersResDB, energyManager);
     }
 
     @Test
