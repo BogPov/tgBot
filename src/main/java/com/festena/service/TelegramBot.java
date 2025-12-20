@@ -1,6 +1,7 @@
 package com.festena.service;
 
 import com.festena.config.BotConfig;
+import com.festena.manager.EnergyManager;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChat;
@@ -23,6 +24,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     final private BotConfig config;
     final private BotService service;
+    EnergyManager energyManager;
 
     private static final Logger log = LoggerFactory.getLogger(TelegramBot.class);
 
@@ -32,9 +34,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final String LORE_BTN_TXT = "\uD83D\uDCD6 Лор игры";
     private static final String RUN_GAME_BTN_TXT = "\uD83C\uDFAE Играть";
 
-    public TelegramBot(BotConfig config, BotService service){
+    public TelegramBot(BotConfig config, BotService service, EnergyManager energyManager){
         this.config = config;
         this.service = service;
+        this.energyManager = energyManager;
     }
 
     @Override
@@ -70,6 +73,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case TOP_BTN_TXT -> msg.setText(BotService.SHOW_LEADERBOARD_COMMAND);
                     case RUN_GAME_BTN_TXT -> msg.setText(BotService.RUN_GAME_COMMAND);
                 }
+                if (messageText.contains(EnergyManager.ENERGY_SIGN)){
+                    msg.setText(BotService.SHOW_ENERGY_MESSAGE_COMMAND);
+                }
             }
             String serviceResponse = service.processMessage(update.getMessage());
             if (!serviceResponse.isEmpty()){
@@ -95,6 +101,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void sendSingleMessage(Long chatId, String text) throws TelegramApiException {
         SendMessage message = createBaseMessage(chatId, text);
         execute(message);
+    }
+
+    public void notifyAllUsers(String notification){
+        List<Long> allChatIds = service.getAllUsersChatId();
+        for (Long chatId : allChatIds){
+            sendTextMessage(chatId, notification);
+        }
     }
 
     private String processSpecialSymbols(String text){
@@ -147,7 +160,17 @@ public class TelegramBot extends TelegramLongPollingBot {
             markup.setKeyboard(rows);
             msg.setReplyMarkup(markup);
             text = text.replace(BotService.NEED_ANSWER_BTNS_SYMBOL, "");
-        } else{
+        } else if (text.contains(BotService.HAVE_TO_BUY_ENERGY_SYMBOL)){
+            InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+            List<InlineKeyboardButton> row1 = new ArrayList<>();
+            row1.add(InlineKeyboardButton.builder().text("Купить за " + BotService.ENERGY_COST + "\uD83D\uDCB0").
+                    callbackData(BotService.BUY_ENERGY_COMMAND).build());
+            rows.add(row1);
+            markup.setKeyboard(rows);
+            msg.setReplyMarkup(markup);
+            text = text.replace(BotService.HAVE_TO_BUY_ENERGY_SYMBOL, "");
+        }else{
             ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup();
             keyboard.setResizeKeyboard(true);
             keyboard.setOneTimeKeyboard(false);
@@ -164,9 +187,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     KeyboardRow row1 = new KeyboardRow();
                     row1.add(HELP_BTN_TXT);
                     row1.add(RUN_GAME_BTN_TXT);
+                    row1.add(RES_BTN_TXT);
                     KeyboardRow row2 = new KeyboardRow();
                     row2.add(LORE_BTN_TXT);
-                    row2.add(RES_BTN_TXT);
+                    row2.add(energyManager.getPlayerEnergy(chatId) + EnergyManager.ENERGY_SIGN);
                     row2.add(TOP_BTN_TXT);
                     buttons.add(row1);
                     buttons.add(row2);
@@ -178,6 +202,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     KeyboardRow row2 = new KeyboardRow();
                     row2.add(LORE_BTN_TXT);
                     row2.add(TOP_BTN_TXT);
+                    row2.add(energyManager.getPlayerEnergy(chatId) + EnergyManager.ENERGY_SIGN);
                     buttons.add(row1);
                     buttons.add(row2);
                 }
