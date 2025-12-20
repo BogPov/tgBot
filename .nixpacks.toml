@@ -1,8 +1,5 @@
 [phases.setup]
-cmds = [
-    "mise use --global java@temurin-21",
-    "mise use --global maven"
-]
+nixpkgs = ["jdk21", "maven"]
 
 [phases.install]
 cmds = [
@@ -14,11 +11,15 @@ cmds = [
     "db.password=${DB_PASSWORD}",
     "server.port=${PORT:-8080}",
     "EOF",
-    "mvn clean install -DskipTests"
+    "mvn -q -Dmaven.test.skip=true clean package"
 ]
 
 [phases.build]
-cmds = ["mvn package -DskipTests"]
+# Можно вообще опустить, Nixpacks сам найдёт jar, но если хочешь:
+cmds = []
+
+[start]
+cmd = "java -Dserver.port=${PORT} -jar target/*jar"
 
 [variables]
 PORT = "8080"

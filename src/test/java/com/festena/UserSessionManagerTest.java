@@ -1,24 +1,32 @@
 package com.festena;
 
 import com.festena.Session.UserSession;
+import com.festena.databases.PlayersResDB;
 import com.festena.manager.UserSessionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class UserSessionManagerTest {
 
     private UserSessionManager userSessionManager;
 
+    @Mock
+    private PlayersResDB playersResDB;
+
     @BeforeEach
     void setUp() {
-        userSessionManager = new UserSessionManager();
+        MockitoAnnotations.openMocks(this);
+        when(playersResDB.isPlayerExists(anyLong())).thenReturn(false);
+        userSessionManager = new UserSessionManager(playersResDB);
     }
 
     @Test
     void constructorShouldInitializeEmptySessionsMap() {
-        //после создания менеджера карта сессий пуста
         assertNotNull(userSessionManager.getAllSessions());
         assertTrue(userSessionManager.getAllSessions().isEmpty());
         assertEquals(0, userSessionManager.getAllSessions().size());
@@ -38,12 +46,16 @@ class UserSessionManagerTest {
         assertNotNull(session);
         assertEquals(chatId, session.getChatId());
         assertEquals(userId, session.getUserId());
+
+        verify(playersResDB).isPlayerExists(chatId);
+        verify(playersResDB).addPlayer(chatId);
     }
 
     @Test
     void isSessionExistShouldReturnTrueForExistingSession() {
         Long chatId = 100L;
         Long userId = 200L;
+
         userSessionManager.addSession(chatId, userId);
 
         assertTrue(userSessionManager.isSessionExist(chatId));
@@ -58,10 +70,10 @@ class UserSessionManagerTest {
     void removeSession() {
         Long chatIdToRemove = 789L;
         Long userIdToRemove = 1011L;
-        userSessionManager.addSession(chatIdToRemove, userIdToRemove);//для удаления
-        userSessionManager.addSession(1L, 2L); //чтобы убедиться, что удаляется нужная сессия
 
-        //существует до удаления
+        userSessionManager.addSession(chatIdToRemove, userIdToRemove);
+        userSessionManager.addSession(1L, 2L);
+
         assertTrue(userSessionManager.isSessionExist(chatIdToRemove));
         assertEquals(2, userSessionManager.getAllSessions().size());
 
