@@ -1,13 +1,22 @@
-package com.festena.manager;
+package com.festena.databases;
+
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.*;
 
+@Component
+public class PlayersResDB implements IDataBase {
+    @Value("${db.url}")
+    private String URL;
 
-public class DataBaseManager {
-    private static String URL;
-    private static String USERNAME;
-    private static String PASSWORD;
+    @Value("${db.username}")
+    private String USERNAME;
+
+    @Value("${db.password}")
+    private String PASSWORD;
 
     public static final String GOLD_KEY = "gold";
     public static final String FOOD_KEY = "food";
@@ -16,14 +25,15 @@ public class DataBaseManager {
     public static final String PEOPLE_KEY = "people";
     public static final String TECHNOLOGY_KEY = "technology";
 
-    public DataBaseManager(){
-        URL = "jdbc:" + System.getenv("DB_URL");
-        USERNAME = System.getenv("DB_USERNAME");
-        PASSWORD = System.getenv("DB_PASSWORD");
+    public PlayersResDB(){}
+
+    @PostConstruct
+    public void init(){
         this.createTable();
     }
 
-    private Connection getConnection() throws SQLException {
+    @Override
+    public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
@@ -188,7 +198,7 @@ public class DataBaseManager {
         return topPlayers;
     }
 
-    // Проверка соединения
+    @Override
     public boolean testConnection() {
         try (Connection conn = getConnection()) {
             return conn != null;

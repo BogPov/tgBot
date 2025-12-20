@@ -1,10 +1,11 @@
 package com.festena.Session;
 
-import com.festena.manager.DataBaseManager;
+import com.festena.databases.PlayersResDB;
 import com.festena.manager.EventManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class UserSession {
@@ -24,8 +25,6 @@ public class UserSession {
     private static final String REPUTATION_ICON = " | 🏅Репутация ";
     final private static String STRING_DIVIDOR = "\n\n";
 
-    private final DataBaseManager dbManager;
-
     public UserSession(Long chatId, Long userId){
         this(chatId, userId, new EventManager());
     }
@@ -34,20 +33,6 @@ public class UserSession {
         this.chatId = chatId;
         this.userId = userId;
         this.resources = new Resources();
-        this.dbManager = new DataBaseManager();
-        if (dbManager.isPlayerExists(chatId)){
-            Map<String, Integer> dbRes = dbManager.getPlayerData(chatId);
-            this.resources.setArmy(dbRes.get(DataBaseManager.ARMY_KEY));
-            this.resources.setGold(dbRes.get(DataBaseManager.GOLD_KEY));
-            this.resources.setPeople(dbRes.get(DataBaseManager.PEOPLE_KEY));
-            this.resources.setTechnology(dbRes.get(DataBaseManager.TECHNOLOGY_KEY));
-            this.resources.setReputation(dbRes.get(DataBaseManager.REPUTATION_KEY));
-            this.resources.setFood(dbRes.get(DataBaseManager.FOOD_KEY));
-        } else{
-            dbManager.addPlayer(chatId);
-            dbManager.updatePlayer(chatId, resources.getGold(), resources.getPeople(), resources.getReputation(),
-                    resources.getFood(), resources.getArmy(), resources.getTechnology());
-        }
         this.eventManager = eventManager;
         log.info("Новая сессия c айди пользователя {} создана", userId);
     }
@@ -104,9 +89,6 @@ public class UserSession {
         resources.addTechnology(resourceChanges.get("technology"));
         resources.addArmy(resourceChanges.get("army"));
 
-        dbManager.updatePlayer(chatId, resources.getGold(), resources.getPeople(), resources.getReputation(),
-                resources.getFood(), resources.getArmy(), resources.getTechnology());
-
         return getChangedResForTab(resourceChanges) + STRING_DIVIDOR + getNextEventText();
     }
 
@@ -125,5 +107,14 @@ public class UserSession {
     public String getNextEventText() {
         eventManager.startNewEvent();
         return eventManager.getCurrentEventText();
+    }
+
+    public void updateRes(Map<String, Integer> newRes){
+        this.resources.setArmy(newRes.get(PlayersResDB.ARMY_KEY));
+        this.resources.setGold(newRes.get(PlayersResDB.GOLD_KEY));
+        this.resources.setPeople(newRes.get(PlayersResDB.PEOPLE_KEY));
+        this.resources.setTechnology(newRes.get(PlayersResDB.TECHNOLOGY_KEY));
+        this.resources.setReputation(newRes.get(PlayersResDB.REPUTATION_KEY));
+        this.resources.setFood(newRes.get(PlayersResDB.FOOD_KEY));
     }
 }

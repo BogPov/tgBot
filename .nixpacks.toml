@@ -9,6 +9,9 @@ cmds = [
     "cat > src/main/resources/application.properties << 'EOF'",
     "bot.token=${BOT_TOKEN}",
     "bot.name=${BOT_NAME}",
+    "db.url=jdbc:${DB_URL}",
+    "db.username=${DB_USERNAME}",
+    "db.password=${DB_PASSWORD}",
     "server.port=${PORT:-8080}",
     "EOF",
     "mvn clean install -DskipTests"

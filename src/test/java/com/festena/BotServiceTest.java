@@ -1,6 +1,7 @@
 package com.festena;
 
 import com.festena.Session.UserSession;
+import com.festena.databases.DataBaseManager;
 import com.festena.manager.TextManager;
 import com.festena.manager.UserSessionManager;
 import com.festena.service.BotService;
@@ -27,6 +28,9 @@ public class BotServiceTest {
 
     @InjectMocks
     private BotService botService;
+
+    @Mock
+    DataBaseManager dbManager;
 
     private final Long CHAT_ID = 12345L;
     private final Long USER_ID = 67890L;

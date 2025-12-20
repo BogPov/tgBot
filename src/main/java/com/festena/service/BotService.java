@@ -1,7 +1,6 @@
 package com.festena.service;
 
 import com.festena.Session.UserSession;
-import com.festena.manager.DataBaseManager;
 import com.festena.manager.TextManager;
 import com.festena.manager.UserSessionManager;
 import org.springframework.stereotype.Service;
@@ -46,13 +45,10 @@ public class BotService {
 
     final private UserSessionManager userSessionManager;
     final private TextManager textManager;
-    private final DataBaseManager dbManager;
-
 
     public BotService(UserSessionManager userSessionManager, TextManager textManager) {
         this.userSessionManager = userSessionManager;
         this.textManager = textManager;
-        this.dbManager = new DataBaseManager();
     }
 
     public String processMessage(Message message) {
@@ -70,7 +66,9 @@ public class BotService {
         UserSession session = userSessionManager.getUserSession(chatId);
         if (session.hasCurrentEvent()) {
             if (messageText.matches("(?i)[abcd]")) {
-                return session.processPlayerAnswer(messageText) + NEED_ANSWER_BTNS_SYMBOL;
+                String response =  session.processPlayerAnswer(messageText) + NEED_ANSWER_BTNS_SYMBOL;
+                userSessionManager.updatePlayerInDB(chatId);
+                return response;
             } else {
                 return CORRECT_ANSWER_WARNING + STRING_DIVIDOR + NEED_ANSWER_BTNS_SYMBOL +  session.getCurrentEventText();
             }
@@ -91,6 +89,7 @@ public class BotService {
             return DIDNT_STARTED_STATE;
         }
     }
+
     private String processCommand(Message message) {
         Long chatId = message.getChatId();
         String messageText = message.getText();
@@ -156,7 +155,7 @@ public class BotService {
     }
 
     public String getOverAllPlayersLeaderboard(int limit){
-        Map<Long, Integer> top = dbManager.getTopPlayers(limit);
+        Map<Long, Integer> top = userSessionManager.getTopPlayers(limit);
         StringBuilder result = new StringBuilder();
         result.append("ТОП ИГРОКОВ ПО ЗОЛОТУ\n");
         int counter = 1;

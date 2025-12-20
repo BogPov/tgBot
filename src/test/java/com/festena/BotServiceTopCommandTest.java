@@ -1,6 +1,6 @@
 package com.festena;
 
-import com.festena.manager.DataBaseManager;
+import com.festena.databases.DataBaseManager;
 import com.festena.manager.TextManager;
 import com.festena.manager.UserSessionManager;
 import com.festena.service.BotService;
