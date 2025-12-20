@@ -2,7 +2,7 @@ package com.festena.manager;
 
 import com.festena.Session.Resources;
 import com.festena.Session.UserSession;
-import com.festena.databases.PlayersResDB;
+import com.festena.databases.IDataBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -15,9 +15,9 @@ public class UserSessionManager {
     private final Map<Long, UserSession> sessions = new HashMap<>();
 
     private static final Logger log = LoggerFactory.getLogger(UserSessionManager.class);
-    PlayersResDB playersTable;
+    private final IDataBase playersTable;
 
-    public UserSessionManager(PlayersResDB playersTable){
+    public UserSessionManager(IDataBase playersTable){
         log.info("Менеджер сессий создан!");
         this.playersTable = playersTable;
     }

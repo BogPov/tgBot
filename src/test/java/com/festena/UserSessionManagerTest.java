@@ -1,7 +1,7 @@
 package com.festena;
 
 import com.festena.Session.UserSession;
-import com.festena.databases.PlayersResDB;
+import com.festena.databases.IDataBase;
 import com.festena.manager.UserSessionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ class UserSessionManagerTest {
     private UserSessionManager userSessionManager;
 
     @Mock
-    private PlayersResDB playersResDB;
+    private IDataBase playersResDB;
 
     @BeforeEach
     void setUp() {
