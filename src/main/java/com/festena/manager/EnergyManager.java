@@ -1,19 +1,19 @@
 package com.festena.manager;
 
-import com.festena.databases.PlayerEnergyDB;
+import com.festena.databases.IPlayerEnergyDataBase;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class EnergyManager {
-    private final PlayerEnergyDB playerEnergyDB;
+    private final IPlayerEnergyDataBase playerEnergyDB;
 
     public static final int ENERGY_PER_HOUR = 10;
     public static final int MAX_ENERGY = 100;
     public static final String ENERGY_SIGN = "⚡";
 
-    public EnergyManager(PlayerEnergyDB playerEnergyDB) {
+    public EnergyManager(IPlayerEnergyDataBase playerEnergyDB) {
         this.playerEnergyDB = playerEnergyDB;
     }
 

@@ -20,13 +20,15 @@ import java.util.Set;
 public class PlayersResDB implements IDataBase {
 
     @Value("${db.url}")
-    private String url;
+    private String dirtyUrl;
 
     @Value("${db.username}")
     private String username;
 
     @Value("${db.password}")
     private String password;
+
+    private String url;
 
     public static final String GOLD_KEY = "gold";
     public static final String FOOD_KEY = "food";
@@ -44,6 +46,7 @@ public class PlayersResDB implements IDataBase {
 
     @PostConstruct
     private void init() {
+        this.url = "jdbc:" + dirtyUrl;
         createTable();
     }
 

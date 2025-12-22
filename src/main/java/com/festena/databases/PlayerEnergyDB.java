@@ -18,7 +18,7 @@ import java.util.List;
 public class PlayerEnergyDB implements IPlayerEnergyDataBase {
 
     @Value("${db.url}")
-    private String url;
+    private String dirtyUrl;
 
     @Value("${db.username}")
     private String username;
@@ -26,10 +26,12 @@ public class PlayerEnergyDB implements IPlayerEnergyDataBase {
     @Value("${db.password}")
     private String password;
 
+    private String url;
     public static final int DEFAULT_ENERGY = 10;
 
     @PostConstruct
     private void init() {
+        this.url = "jdbc:" + dirtyUrl;
         createTable();
     }
 
