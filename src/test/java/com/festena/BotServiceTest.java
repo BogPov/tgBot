@@ -1,15 +1,15 @@
 package com.festena;
 
 import com.festena.Session.UserSession;
-import com.festena.databases.IDataBase;
+import com.festena.databases.IPlayerEnergyDataBase;
+import com.festena.fakeDBs.FakePlayerEnergyDB;
 import com.festena.manager.EnergyManager;
-
 import com.festena.manager.TextManager;
 import com.festena.manager.UserSessionManager;
 import com.festena.service.BotService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -23,21 +23,27 @@ public class BotServiceTest {
 
     @Mock
     private UserSessionManager userSessionManager;
+
     @Mock
     private TextManager textManager;
+
     @Mock
     private UserSession userSession;
-    @Mock
+
+    private IPlayerEnergyDataBase energyDb;
     private EnergyManager energyManager;
-
-    @InjectMocks
     private BotService botService;
-
-    @Mock
-    IDataBase dataBase;
 
     private final Long CHAT_ID = 12345L;
     private final Long USER_ID = 67890L;
+
+    @BeforeEach
+    void setUp() {
+        energyDb = new FakePlayerEnergyDB();
+        energyDb.addPlayerToDB(CHAT_ID);
+        energyManager = spy(new EnergyManager(energyDb));
+        botService = new BotService(userSessionManager, textManager, energyManager);
+    }
 
     private Message createMockMessage(String text, Long chatId, Long userId) {
         Message message = mock(Message.class);

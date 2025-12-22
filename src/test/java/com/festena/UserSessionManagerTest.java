@@ -2,11 +2,13 @@ package com.festena;
 
 import com.festena.Session.UserSession;
 import com.festena.databases.IDataBase;
+import com.festena.databases.IPlayerEnergyDataBase;
+import com.festena.fakeDBs.FakePlayerEnergyDB;
+import com.festena.fakeDBs.FakePlayerResDB;
 import com.festena.manager.EnergyManager;
 import com.festena.manager.UserSessionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,17 +17,18 @@ import static org.mockito.Mockito.*;
 class UserSessionManagerTest {
 
     private UserSessionManager userSessionManager;
-
-    @Mock
     private IDataBase playersResDB;
-
-    @Mock
+    private IPlayerEnergyDataBase energyDb;
     private EnergyManager energyManager;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(playersResDB.isPlayerExists(anyLong())).thenReturn(false);
+
+        energyDb = new FakePlayerEnergyDB();
+        energyManager = spy(new EnergyManager(energyDb));
+
+        playersResDB = new FakePlayerResDB();
         userSessionManager = new UserSessionManager(playersResDB, energyManager);
     }
 
@@ -51,8 +54,7 @@ class UserSessionManagerTest {
         assertEquals(chatId, session.getChatId());
         assertEquals(userId, session.getUserId());
 
-        verify(playersResDB).isPlayerExists(chatId);
-        verify(playersResDB).addPlayer(chatId);
+        assertTrue(playersResDB.isPlayerExists(chatId));
     }
 
     @Test
